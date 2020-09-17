@@ -25,7 +25,6 @@ from App import model
 import datetime
 import csv
 
-
 """
 El controlador se encarga de mediar entre la vista y el modelo.
 Existen algunas operaciones en las que se necesita invocar
@@ -55,7 +54,7 @@ def init():
 
 def loadData(analyzer, crimesfile):
     """
-    Carga los datos de los archivos en el modelo
+    Carga los datos de los archivos CSV en el modelo
     """
     crimesfile = cf.data_dir + crimesfile
     input_file = csv.DictReader(open(crimesfile, encoding="utf-8"),
