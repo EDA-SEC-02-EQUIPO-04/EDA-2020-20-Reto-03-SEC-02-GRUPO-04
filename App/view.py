@@ -46,11 +46,15 @@ crimefile = 'crime-utf8.csv'
 
 
 def printMenu():
+    print("\n")
+    print("*******************************************")
     print("Bienvenido")
     print("1- Inicializar Analizador")
     print("2- Cargar información de crimenes")
     print("3- Consultar crimenes en un rango de fechas")
+    print("4- Consultar crimenes por codigo y fecha")
     print("0- Salir")
+    print("*******************************************")
 
 
 """
@@ -58,15 +62,15 @@ Menu principal
 """
 while True:
     printMenu()
-    inputs = input('Seleccione una opción para continuar\n')
+    inputs = input('Seleccione una opción para continuar\n>')
 
     if int(inputs[0]) == 1:
-        print("Inicializando....")
+        print("\nInicializando....")
         # cont es el controlador que se usará de acá en adelante
         cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        print("Cargando información de crimenes ....")
+        print("\nCargando información de crimenes ....")
         controller.loadData(cont, crimefile)
         print('Crimenes cargados: ' + str(controller.crimesSize(cont)))
         print('Altura del arbol: ' + str(controller.indexHeight(cont)))
@@ -75,11 +79,20 @@ while True:
         print('Mayor Llave: ' + str(controller.maxKey(cont)))
 
     elif int(inputs[0]) == 3:
-        print("Buscando crimenes en un rango de fechas: ")
+        print("\nBuscando crimenes en un rango de fechas: ")
         initialDate = input("Rango Inicial (YYYY-MM-DD): ")
         finalDate = input("Rango Inicial (YYYY-MM-DD): ")
         lst = controller.getCrimesByRange(cont, initialDate, finalDate)
-        print("Total de llaves en el rango: " + str(lt.size(lst)))
+        print("\nTotal de llaves en el rango: " + str(lt.size(lst)))
+
+    elif int(inputs[0]) == 4:
+        print("\nBuscando crimenes x grupo de ofensa en una fecha: ")
+        initialDate = input("Fecha (YYYY-MM-DD): ")
+        offensecode = input("Codigo de ofensa: ")
+        numoffenses = controller.getCrimesByRangeCode(cont, initialDate,
+                                                      offensecode)
+        print("\nTotal de ofensas tipo: " + offensecode + " en esa fecha:  " +
+              str(numoffenses))
 
     else:
         sys.exit(0)
