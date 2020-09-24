@@ -7,9 +7,6 @@ Estructuras de Datos y Algoritmos de la Universidad de los Andes.
 
 ## Integrantes del equipo
 
-- Andrés Molina
-  - Correo: a.molinam@uniandes.edu.co
-  - Código: 201923434
 - María Alejandra Vargas
   - Correo: ma.vargas73@uniandes.edu.co
   - Código: 201123148
