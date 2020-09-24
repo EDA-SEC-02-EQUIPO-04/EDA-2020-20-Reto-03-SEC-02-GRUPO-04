@@ -1,6 +1,6 @@
-# Laboratorio #5
+# Laboratorio #7
 
-### Tablas de hash
+### Tablas de símbolos ordenadas
 
 Realizado por el equipo 4 de la sección 2 del curso 
 Estructuras de Datos y Algoritmos de la Universidad de los Andes.
