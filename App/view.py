@@ -24,6 +24,7 @@ import sys
 import config
 from DISClib.ADT import list as lt
 from App import controller
+
 assert config
 
 """
@@ -39,6 +40,7 @@ operación seleccionada.
 
 
 crimefile = 'crime-utf8.csv'
+
 
 # ___________________________________________________
 #  Menu principal

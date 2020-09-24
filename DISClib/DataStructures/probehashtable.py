@@ -30,6 +30,7 @@ import math
 import config
 from DISClib.DataStructures import mapentry as me
 from DISClib.DataStructures import liststructure as lt
+
 assert config
 
 """
@@ -63,8 +64,8 @@ def newMap(numelements, prime, loadfactor, comparefunction):
     Raises:
         Exception
     """
-    capacity = nextPrime(numelements//loadfactor)
-    scale = rd.randint(1, prime-1) + 1
+    capacity = nextPrime(numelements // loadfactor)
+    scale = rd.randint(1, prime - 1) + 1
     shift = rd.randint(1, prime)
     table = lt.newList('ARRAY_LIST', comparefunction)
     for _ in range(capacity):
@@ -94,11 +95,11 @@ def put(map, key, value):
     Raises:
         Exception
     """
-    hash = hashValue(map, key)      # Se obtiene el hascode de la llave
+    hash = hashValue(map, key)  # Se obtiene el hascode de la llave
     entry = me.newMapEntry(key, value)
     pos = findSlot(map, key, hash, map['comparefunction'])
     lt.changeInfo(map['table'], abs(pos), entry)
-    if (pos < 0):                   # Se reemplaza el valor con el nuevo valor
+    if (pos < 0):  # Se reemplaza el valor con el nuevo valor
         map['size'] += 1
     return map
 
@@ -187,7 +188,7 @@ def isEmpty(map):
     """
     empty = True
     for pos in range(lt.size(map['table'])):
-        entry = lt.getElement(map['table'], pos+1)
+        entry = lt.getElement(map['table'], pos + 1)
         if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
             empty = False
             break
@@ -207,7 +208,7 @@ def keySet(map):
     """
     ltset = lt.newList()
     for pos in range(lt.size(map['table'])):
-        entry = lt.getElement(map['table'], pos+1)
+        entry = lt.getElement(map['table'], pos + 1)
         if (entry['key'] is not None and entry['key'] != '__EMPTY__'):
             lt.addLast(ltset, entry['key'])
     return ltset
@@ -226,7 +227,7 @@ def valueSet(map):
     """
     ltset = lt.newList()
     for pos in range(lt.size(map['table'])):
-        entry = lt.getElement(map['table'], pos+1)
+        entry = lt.getElement(map['table'], pos + 1)
         if (entry['value'] is not None and entry['value'] != '__EMPTY__'):
             lt.addLast(ltset, entry['value'])
     return ltset
@@ -251,7 +252,7 @@ def hashValue(table, key):
     b = table['shift']
     p = table['prime']
     m = table['capacity']
-    value = int((abs(h*a + b) % p) % m + 1)
+    value = int((abs(h * a + b) % p) % m + 1)
     return value
 
 
@@ -263,24 +264,24 @@ def findSlot(map, key, hashvalue, comparefunction):
     hashvalue: La posición inicial de la llave
     comparefunction: funcion de comparación para la búsqueda de la llave
     """
-    avail = -1                           # no se ha encontrado una posición aun
+    avail = -1  # no se ha encontrado una posición aun
     searchpos = 0
     table = map['table']
-    while (searchpos != hashvalue):       # Se busca una posición
+    while (searchpos != hashvalue):  # Se busca una posición
         if (searchpos == 0):
             searchpos = hashvalue
         if isAvailable(table, searchpos):  # La posición esta disponible
             element = lt.getElement(table, searchpos)
             if (avail == -1):
-                avail = searchpos            # primera posición disponible
-            if element['key'] is None:       # nunca ha sido utilizada
+                avail = searchpos  # primera posición disponible
+            if element['key'] is None:  # nunca ha sido utilizada
                 break
-        else:                               # la posicion no estaba disponible
+        else:  # la posicion no estaba disponible
             element = lt.getElement(table, searchpos)
             if comparefunction(key, element) == 0:  # Es la llave
-                return searchpos               # Se  retorna la posicion
-        searchpos = (((searchpos) % map['capacity'])+1)
-    return -(avail)    # numero negativo indica que el elemento no estaba
+                return searchpos  # Se  retorna la posicion
+        searchpos = (((searchpos) % map['capacity']) + 1)
+    return -(avail)  # numero negativo indica que el elemento no estaba
 
 
 def isAvailable(table, pos):
@@ -295,6 +296,7 @@ def isAvailable(table, pos):
         return True
     return False
 
+
 # Function that returns True if n
 # is prime else returns False
 # This code is contributed by Sanjit_Prasad
@@ -302,16 +304,16 @@ def isAvailable(table, pos):
 
 def isPrime(n):
     # Corner cases
-    if(n <= 1):
+    if (n <= 1):
         return False
-    if(n <= 3):
+    if (n <= 3):
         return True
 
-    if(n % 2 == 0 or n % 3 == 0):
+    if (n % 2 == 0 or n % 3 == 0):
         return False
 
     for i in range(5, int(math.sqrt(n) + 1), 6):
-        if(n % i == 0 or n % (i + 2) == 0):
+        if (n % i == 0 or n % (i + 2) == 0):
             return False
 
     return True
@@ -328,8 +330,8 @@ def nextPrime(N):
     found = False
     # Loop continuously until isPrime returns
     # True for a number greater than n
-    while(not found):
+    while (not found):
         prime = prime + 1
-        if(isPrime(prime) is True):
+        if (isPrime(prime) is True):
             found = True
     return int(prime)
