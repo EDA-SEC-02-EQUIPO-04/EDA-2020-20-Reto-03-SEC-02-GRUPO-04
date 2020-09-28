@@ -39,8 +39,20 @@ operación seleccionada.
 # ___________________________________________________
 
 
-crimefile = 'crime-utf8.csv'
+file = 'us_accidents_small.csv'
 
+
+# ___________________________________________________
+#  Funciones Print
+# ___________________________________________________
+
+def printAccidentsByDateSeverity(analyzer, date):
+    accidentsInDate = controller.getAccidentsByDate(analyzer, date)
+    accidentsBySeverity = controller.getAccidentsBySeverity(analyzer, date)
+    print("Total de accidentes ocurridos en la fecha:", accidentsInDate)
+    print("\nAccidentes de severidad 1:", accidentsBySeverity[0])
+    print("Accidentes de severidad 2:", accidentsBySeverity[1])
+    print("Accidentes de severidad 3:", accidentsBySeverity[2])
 
 # ___________________________________________________
 #  Menu principal
@@ -77,14 +89,41 @@ while True:
         cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        print("\nCargando información de crimenes ....")
+        print("\nCargando información de accidentes ....")
+        controller.loadData(cont, file)
+        size = controller.accidentsSize(cont)
+        treeHeight = controller.indexHeight(cont)
+        treeSize = controller.indexSize(cont)
+        minKey = controller.minKey(cont)
+        maxKey = controller.maxKey(cont)
+        print("Accidentes cargados:", size)
+        print("Altura del arbol:", treeHeight)
+        print("Elementos en el arbol:", treeSize)
+        print("Menor llave:", minKey)
+        print("Mayor llave:", maxKey)
 
     elif int(inputs[0]) == 3:
-        print("\nBuscando crimenes en un rango de fechas: ")
-
+        print("\nConocer los accidentes en una fecha: ")
+        date = input("Fecha: ")
+        printAccidentsByDateSeverity(cont, date)
 
     elif int(inputs[0]) == 4:
-        print("\nRequerimiento No 1 del reto 3: ")
+        print("\nRequerimiento No 2 del reto 3: ")
+    
+    elif int(inputs[0]) == 5:
+        print("\nRequerimiento No 3 del reto 3: ")
+
+    elif int(inputs[0]) == 6:
+        print("\nRequerimiento No 4 del reto 3: ")
+
+    elif int(inputs[0]) == 7:
+        print("\nRequerimiento No 5 del reto 3: ")
+
+    elif int(inputs[0]) == 8:
+        print("\nRequerimiento No 6 del reto 3: ")
+    
+    elif int(inputs[0]) == 8:
+        print("\nRequerimiento No 7 del reto 3: ")
 
     else:
         sys.exit(0)
