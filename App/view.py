@@ -61,6 +61,9 @@ def printMenu():
 """
 Menu principal
 """
+"""
+Alternativa 2 
+
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n>')
@@ -89,3 +92,4 @@ while True:
     else:
         sys.exit(0)
 sys.exit(0)
+"""

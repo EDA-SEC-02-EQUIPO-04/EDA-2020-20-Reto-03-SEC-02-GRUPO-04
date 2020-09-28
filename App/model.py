@@ -38,37 +38,42 @@ es decir contiene los modelos con los datos en memoria
 # -----------------------------------------------------
 # API del TAD Catalogo de accidentes
 # -----------------------------------------------------
+"""
+Alterntiva 2
 
 def newAnalyser():
-    """ Inicializa el analizador
+    """ #Inicializa el analizador
 
-    Crea una lista vacia para guardar todos los accidentes
-    Se crean indices (Maps) por los siguientes criterios:
-    -Fechas
+    #Crea una lista vacia para guardar todos los accidentes
+    #Se crean indices (Maps) por los siguientes criterios:
+    #-Fechas
 
-    Retorna el analizador inicializado.
+    #Retorna el analizador inicializado.
     """
     analyser = {'severity':lt.newList('SINGLE_LINKED', compareids),
                 'date': om.newMap(omaptype ='BST', comparefunction = compareDates)}
     return analyser
-
+"""
 # Funciones para agregar informacion al catalogo
-
+"""
+Alterntiva 2
 def addAccident(analyzer, accident):
     """
     """
     lt.addLast(analyzer['severity'], accident)
     updateDateIndex(analyzer['date'], accident)
     return analyzer
-
+"""
+"""
+Alterntiva 2
 def updateDateIndex(map, accident):
     """
-    Se toma la fecha del accidente y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de accidentes
-    y se actualiza el indice de la severidad de los accidentes.
+    #Se toma la fecha del accidente y se busca si ya existe en el arbol
+    #dicha fecha.  Si es asi, se adiciona a su lista de accidentes
+    #y se actualiza el indice de la severidad de los accidentes.
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de la severidad de los accidentes
+    #Si no se encuentra creado un nodo para esa fecha en el arbol
+    #se crea y se actualiza el indice de la severidad de los accidentes
     """
     
     ocurreddate = accident['Start_Time']
@@ -82,13 +87,15 @@ def updateDateIndex(map, accident):
     addDateIndex(datentry, accident)
     
     return map
-
+"""
+"""
+Alterntiva 2
 def addDateIndex(datentry, accident):
     """
-    Actualiza un indice de la severidad del accidente. Este indice tiene una lista
-    de las severidades y una tabla de hash cuya llave a severidad del accidente y
-    el valor es una lista con los accidentes de dicho tipo en la fecha que
-    se está consultando (dada por el nodo del arbol)
+    #Actualiza un indice de la severidad del accidente. Este indice tiene una lista
+    #de las severidades y una tabla de hash cuya llave a severidad del accidente y
+    #el valor es una lista con los accidentes de dicho tipo en la fecha que
+    #se está consultando (dada por el nodo del arbol)
     """
 
     lst = datentry['lstaccidents']
@@ -103,11 +110,13 @@ def addDateIndex(datentry, accident):
         entry = me.getValue(offentry)
         lt.addLast(entry['lstseverity'], accident)
     return datentry
-
+"""
+"""
+Alterntiva 2
 def newDataEntry(accident):
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
-    binario
+    #Crea una entrada en el indice por fechas, es decir en el arbol
+    #binario
     """
     entry = {'severityIndex': None, 'lstaccidents': None}
     entry['severityIndex'] = m.newMap(numelements=30,
@@ -115,32 +124,39 @@ def newDataEntry(accident):
                                      comparefunction=compareseverities)
     entry['lstaccidents'] = lt.newList('SINGLE_LINKED', compareDates)
     return entry
+"""
 
+"""
+Alterntiva 2
 def newoffenseEntry(severitygrp, accident):
     """
-    Crea una entrada en el indice por la severidad del accidente, es decir, en
-    la tabla de hash, que se encuentra en cada nodo del arbol.
+    #Crea una entrada en el indice por la severidad del accidente, es decir, en
+    #la tabla de hash, que se encuentra en cada nodo del arbol.
     """
 
     seventry = {'severity': None, 'lstseverity': None}
     seventry['severity'] = severitygrp
     seventry['lstseverity'] = lt.newList('SINGLE_LINKED', compareseverities)
     return seventry
-
+"""
 # ==============================
 # Funciones de consulta
 # ==============================
 
-
+"""
+Alterntiva 2
 def accidentsSize(analyzer):
     """
-    Número de libros en el catago
+    #Número de libros en el catago
     """
     return lt.size(analyzer['severity'])
 
-
+"""
+"""
+Alterntiva 2
 def indexHeight(analyzer):
-    """Numero de autores leido
+    """
+    #Numero de autores leido
     """
     return om.height(analyzer['date'])
 

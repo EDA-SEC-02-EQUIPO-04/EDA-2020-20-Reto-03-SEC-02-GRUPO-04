@@ -53,10 +53,12 @@ def init():
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+"""
+Alterntiva 2
 
 def loadData(analyzer, accidentsfile):
     """
-    Carga los datos de los archivos CSV en el modelo
+    # Carga los datos de los archivos CSV en el modelo
     """
     dialect, dialect.delimiter = csv.excel, ','
     input_file = csv.DictReader(open(accidentsfile, encoding='utf-8-sig'), dialect=dialect)
@@ -66,49 +68,58 @@ def loadData(analyzer, accidentsfile):
         model.addAccident(analyzer, accident)
     
     return analyzer
-
+"""
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
 
-
+"""
+Alterntiva 2
 def accidentsSize(analyzer):
     """
-    Numero de accidentes leidos
+    # Numero de accidentes leidos
     """
     return model.accidentsSize(analyzer)
-
+"""
+"""
+Alterntiva 2
 
 def indexHeight(analyzer):
     """
-    Altura del indice (arbol)
+    # Altura del indice (arbol)
     """
     return model.indexHeight(analyzer)
-
-
+"""
+"""
+Alterntiva 2
 def indexSize(analyzer):
     """
-    Numero de nodos en el arbol
+    #Numero de nodos en el arbol
     """
     return model.indexSize(analyzer)
-
-
+"""
+"""
+Alterntiva 2
 def minKey(analyzer):
     """
-    La menor llave del arbol
+    #La menor llave del arbol
     """
     return model.minKey(analyzer)
-
-
+"""
+"""
+Alterntiva 2
 def maxKey(analyzer):
     """
-    La mayor llave del arbol
+    #La mayor llave del arbol
     """
     return model.maxKey(analyzer)
-
+"""
+"""
+Alterntiva 2
 def getAccidentsByRangeCode(analyzer, initialDate, severitycode):
     """
-    Retorna el total de accidentes de una severidad específica
+    #Retorna el total de accidentes de una severidad específica
     """
     initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
     return model.getAccidentsByRangeCode(analyzer, initialDate.date(), severitycode)
+"""
