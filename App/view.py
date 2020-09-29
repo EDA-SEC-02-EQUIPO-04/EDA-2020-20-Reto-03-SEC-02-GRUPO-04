@@ -41,7 +41,7 @@ operación seleccionada.
 
 file = 'us_accidents_small.csv'
 
-
+""" Alternativa 3
 # ___________________________________________________
 #  Funciones Print
 # ___________________________________________________
@@ -77,7 +77,7 @@ def printMenu():
 
 
 """
-Menu principal
+#Menu principal
 """
 while True:
     printMenu()
@@ -128,3 +128,4 @@ while True:
     else:
         sys.exit(0)
 sys.exit(0)
+"""
