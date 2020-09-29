@@ -39,7 +39,7 @@ es decir contiene los modelos con los datos en memoria
 # API del TAD Catalogo de accidentes
 # -----------------------------------------------------
 
-
+""" Alternativa 3
 def newAnalyzer():
 
     analyzer = {"accidents:": None,
@@ -179,3 +179,4 @@ def compareSeveritys(severity1, severity2):
         return 1
     else:
         return -1
+"""
