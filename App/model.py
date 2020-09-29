@@ -109,7 +109,7 @@ def new_data_entry():
     Crea una entrada en el indice por fechas, es decir en el árbol
     binario.
     """
-    entry = {'severity_index': m.newMap(numelements=10, maptype='PROBING', comparefunction=compare_severities),
+    entry = {'severity_index': m.newMap(numelements=3, maptype='PROBING', comparefunction=compare_severities),
              'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
     return entry
 
@@ -168,12 +168,18 @@ def get_accidents_by_date(analyzer, date):
     """
     lst = om.get(analyzer['date_index'], date)
     print('\n------------------------------')
-    print(f'Accidentes del {lst["key"]}:')
+    ids = []
     totaccidents = lt.size(lst['value']['lstaccidents'])
     lstiterator = it.newIterator(lst['value']['lstaccidents'])
     while it.hasNext(lstiterator):
         element = it.next(lstiterator)
-        print(f'- {element["ID"]}')
+        if int(element["Severity"]) >= 3:
+            ids.insert(0, element["ID"])
+        elif int(element["Severity"]) <= 2:
+            ids.insert(-1, element["ID"])
+    # Print IDs.
+    print(f'IDs de accidentes del {lst["key"]}:')
+    print(f'{ids}')
     return totaccidents
 
 
