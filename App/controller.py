@@ -51,10 +51,10 @@ def init():
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
-
+""" Alternativa 3
 def loadData(analyzer, accidentsfile):
     """
-    Carga los datos de los archivos CSV en el modelo
+    #Carga los datos de los archivos CSV en el modelo
     """
     openFile = open(cf.data_dir + accidentsfile, encoding="utf-8")
     input_file = csv.DictReader(openFile, delimiter=",")
@@ -87,3 +87,4 @@ def getAccidentsByDate(analyzer, date):
 
 def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
+"""
