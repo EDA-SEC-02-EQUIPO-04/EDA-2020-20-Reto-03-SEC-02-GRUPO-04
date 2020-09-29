@@ -66,7 +66,7 @@ Menu principal.
 cont = controller.init()
 while True:
     print_menu()
-    inputs = input('Seleccione una opción para continuar\n')
+    inputs = input('Seleccione una opción para continuar\n> ')
     if int(inputs[0]) == 1:
         t1_start = process_time()
         print('\nInicializando...')
@@ -76,7 +76,7 @@ while True:
         t1_start = process_time()
         print('\nCargando información de accidentes...')
         controller.load_data(cont, accidentsfile)
-        print(f'Accidentes cargados: {controller.crimes_size(cont)}')
+        print(f'Accidentes cargados: {controller.accidents_size(cont)}')
         print(f'Altura del árbol: {controller.index_height(cont)}')
         print(f'Elementos en el árbol: {controller.index_size(cont)}')
         print(f'Menor Llave: {controller.min_key(cont)}')

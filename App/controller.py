@@ -73,10 +73,10 @@ def accidents_size(analyzer):
     """
     Número de crímenes leídos.
     """
-    return model.crime_size(analyzer)
+    return model.accidents_size(analyzer)
 
 
-def inde_height(analyzer):
+def index_height(analyzer):
     """
     Altura del indice (árbol).
     """

@@ -43,7 +43,7 @@ es decir contiene los modelos con los datos en memoria.
 def new_analyzer():
     """ Inicializa el analizador
 
-    Crea una lista vacia para guardar todos los accidentnes
+    Crea una lista vacia para guardar todos los accidentes
     Se crean indices (Maps) por los siguientes criterios:
     -Fechas
 
@@ -60,71 +60,67 @@ def add_accident(analyzer, accident):
     """
     """
     lt.addLast(analyzer['accidents'], accident)
-    update_date_index(analyzer['dateIndex'], accident)
+    update_date_index(analyzer['date_index'], accident)
     return analyzer
 
 
 def update_date_index(map_, accident):
     """
-    Se toma la fecha del accidente y se busca si ya existe en el arbol
-    dicha fecha.  Si es asi, se adiciona a su lista de accidentnes
-    y se actualiza el indice de tipos de accidentnes.
+    Se toma la fecha del accidente y se busca si ya existe en el árbol
+    dicha fecha. Si es asi, se adiciona a su lista de accidentes
+    y se actualiza el índice de tipos de accidentes.
 
-    Si no se encuentra creado un nodo para esa fecha en el arbol
-    se crea y se actualiza el indice de tipos de accidentnes
+    Si no se encuentra creado un nodo para esa fecha en el árbol
+    se crea y se actualiza el índice de tipos de accidentes.
     """
     occurreddate = accident['Start_Time']
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     entry = om.get(map_, accidentdate.date())
     if entry is None:
-        datentry = newDataEntry(accident)
+        datentry = new_data_entry()
         om.put(map_, accidentdate.date(), datentry)
     else:
         datentry = me.getValue(entry)
-    addDateIndex(datentry, accident)
-    return map_
+    add_date_index(datentry, accident)
 
 
 def add_date_index(datentry, accident):
     """
-    Actualiza un indice de tipo de accidentnes.  Este indice tiene una lista
-    de accidentnes y una tabla de hash cuya llave es el tipo de accidentn y
-    el valor es una lista con los accidentnes de dicho tipo en la fecha que
+    Actualiza un indice de tipo de accidentes. Este índice tiene una lista
+    de accidentes y una tabla de hash cuya llave es el tipo de accidentn y
+    el valor es una lista con los accidentes de dicho tipo en la fecha que
     se está consultando (dada por el nodo del arbol)
     """
     lst = datentry['lstaccidents']
     lt.addLast(lst, accident)
-    offenseIndex = datentry['offenseIndex']
-    offentry = m.get(offenseIndex, accident['OFFENSE_CODE_GROUP'])
-    if (offentry is None):
-        entry = newOffenseEntry(accident['OFFENSE_CODE_GROUP'], accident)
-        lt.addLast(entry['lstoffenses'], accident)
-        m.put(offenseIndex, accident['OFFENSE_CODE_GROUP'], entry)
+    severity_index = datentry['severity_index']
+    seventry = m.get(severity_index, accident['Severity'])
+    if seventry is None:
+        entry = new_severity_index(accident['Severity'])
+        lt.addLast(entry['lstseverities'], accident)
+        m.put(severity_index, accident['Severity'], entry)
     else:
-        entry = me.getValue(offentry)
-        lt.addLast(entry['lstoffenses'], accident)
-    return datentry
+        entry = me.getValue(seventry)
+        lt.addLast(entry['lstseverities'], accident)
 
 
-def new_data_entry(accident):
+def new_data_entry():
     """
-    Crea una entrada en el indice por fechas, es decir en el arbol
+    Crea una entrada en el indice por fechas, es decir en el árbol
     binario.
     """
-    entry = {'offenseIndex': m.newMap(numelements=30,
-                                      maptype='PROBING',
-                                      comparefunction=compare_offenses),
+    entry = {'severity_index': m.newMap(numelements=10, maptype='PROBING', comparefunction=compare_severities),
              'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
     return entry
 
 
-def new_offense_entry(offensegrp, accident):
+def new_severity_index(severity_grade):
     """
-    Crea una entrada en el indice por tipo de accidentn, es decir en
-    la tabla de hash, que se encuentra en cada nodo del arbol.
+    Crea una entrada en el indice por tipo de severidad, es decir en
+    la tabla de hash, que se encuentra en cada nodo del árbol.
     """
-    ofentry = {'offense': offensegrp, 'lstoffenses': lt.newList('SINGLELINKED', compare_offenses)}
-    return ofentry
+    seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
+    return seventry
 
 
 # ==============================
@@ -166,16 +162,18 @@ def max_key(analyzer):
     return om.maxKey(analyzer['date_index'])
 
 
-def get_accidents_by_date(analyzer, initialDate, finalDate):
+def get_accidents_by_date(analyzer, date):
     """
-    Retorna el numero de accidentnes en un rago de fechas.
+    Retorna el numero de accidentes en una fecha.
     """
-    lst = om.values(analyzer['date_index'], initialDate, finalDate)
-    lstiterator = it.newIterator(lst)
-    totaccidents = 0
+    lst = om.get(analyzer['date_index'], date)
+    print('\n------------------------------')
+    print(f'Accidentes del {lst["key"]}:')
+    totaccidents = lt.size(lst['value']['lstaccidents'])
+    lstiterator = it.newIterator(lst['value']['lstaccidents'])
     while it.hasNext(lstiterator):
-        lstdate = it.next(lstiterator)
-        totaccidents += lt.size(lstdate['lstaccidents'])
+        element = it.next(lstiterator)
+        print(f'- {element["ID"]}')
     return totaccidents
 
 
@@ -183,11 +181,11 @@ def get_accidents_by_date(analyzer, initialDate, finalDate):
 # Funciones de Comparación.
 # ==============================
 
-def compareIds(id1, id2):
+def compare_ids(id1, id2):
     """
-    Compara dos accidentnes
+    Compara dos accidentes
     """
-    if (id1 == id2):
+    if id1 == id2:
         return 0
     elif id1 > id2:
         return 1
@@ -199,22 +197,22 @@ def compare_dates(date1, date2):
     """
     Compara dos fechas
     """
-    if (date1 == date2):
+    if date1 == date2:
         return 0
-    elif (date1 > date2):
+    elif date1 > date2:
         return 1
     else:
         return -1
 
 
-def compare_offenses(offense1, offense2):
+def compare_severities(severity1, severity2):
     """
-    Compara dos tipos de accidentnes
+    Compara dos severidades de accidentes.
     """
-    offense = me.getKey(offense2)
-    if (offense1 == offense):
+    severity = me.getKey(severity2)
+    if severity1 == severity:
         return 0
-    elif (offense1 > offense):
+    elif severity1 > severity:
         return 1
     else:
         return -1
