@@ -13,6 +13,9 @@ Estructuras de Datos y Algoritmos de la Universidad de los Andes.
 - Juan Alegría
   - Correo: j.alegria@uniandes.edu.co
   - Código: 202011282
+- Andrés Felipe Romero Brand
+  - Correo: af.romerob1@uniandes.edu.co
+  - Código: 202013448
   
 ## Estructura del proyecto
 

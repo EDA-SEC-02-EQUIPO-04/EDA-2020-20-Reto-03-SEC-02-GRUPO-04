@@ -56,6 +56,7 @@ def printAccidentsByDateSeverity(analyzer, date):
     print("Accidentes de severidad 2:", accidentsBySeverity[1])
     print("Accidentes de severidad 3:", accidentsBySeverity[2])
 
+
 # ___________________________________________________
 #  Menú principal.
 # ___________________________________________________
@@ -73,7 +74,7 @@ def print_menu():
     print("6- Conocer el estado con más accidentes")
     print("7- Conocer los accidentes por rango de horas")
     print("8- Conocer la zona geográfica más accidentada")
-    print("8- Usar el conjunto completo de datos")
+    print("9- Usar el conjunto completo de datos")
     print("0- Salir")
     print("*******************************************")
 
@@ -108,10 +109,10 @@ while True:
         print("\nConocer los accidentes en una fecha: ")
         date = input("Fecha: ")
         printAccidentsByDateSeverity(cont, date)
-        
+
     elif int(inputs[0]) == 4:
         print("\nRequerimiento No 2 del reto 3: ")
-    
+
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")
 
@@ -123,8 +124,8 @@ while True:
 
     elif int(inputs[0]) == 8:
         print("\nRequerimiento No 6 del reto 3: ")
-    
-    elif int(inputs[0]) == 8:
+
+    elif int(inputs[0]) == 9:
         print("\nRequerimiento No 7 del reto 3: ")
     else:
         sys.exit(0)
@@ -137,6 +138,7 @@ while True:
         print(f'\nTotal de accidentes en {date}: {total}')
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
      """
+
 """ Aternativa 2
         print("\nCargando información de los accidentes ....")
         controller.loadData(cont, accidentsfile) 
@@ -157,3 +159,4 @@ while True:
         sys.exit(0)
 sys.exit(0)
 """
+

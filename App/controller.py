@@ -111,13 +111,14 @@ def max_key(analyzer):
     """
     return model.max_key(analyzer)
 
-  
+
 def getAccidentsByDate(analyzer, date):
     return model.getAccidentsByDate(analyzer, date)
 
-  
+
 def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
+
 
 """
 Alterntiva 2
@@ -183,3 +184,4 @@ def load_data(analyzer, accidentsfile):
     
     return analyzer
 """
+
