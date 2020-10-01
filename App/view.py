@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
  * Copyright 2020, Departamento de sistemas y Computación
  * Universidad de Los Andes
@@ -24,6 +25,7 @@ import sys
 import config
 from DISClib.ADT import list as lt
 from App import controller
+from time import process_time
 
 assert config
 
@@ -35,13 +37,13 @@ operación seleccionada.
 """
 
 # ___________________________________________________
-#  Ruta a los archivos
+#  Ruta a los archivos.
 # ___________________________________________________
 
 
-file = 'us_accidents_small.csv'
+accidentsfile = 'us_accidents_small.csv'
 
-""" Alternativa 3
+
 # ___________________________________________________
 #  Funciones Print
 # ___________________________________________________
@@ -55,11 +57,11 @@ def printAccidentsByDateSeverity(analyzer, date):
     print("Accidentes de severidad 3:", accidentsBySeverity[2])
 
 # ___________________________________________________
-#  Menu principal
+#  Menú principal.
 # ___________________________________________________
 
 
-def printMenu():
+def print_menu():
     print("\n")
     print("*******************************************")
     print("Bienvenido")
@@ -77,36 +79,34 @@ def printMenu():
 
 
 """
-#Menu principal
+Menu principal.
 """
+
+cont = controller.init()
 while True:
-    printMenu()
-    inputs = input('Seleccione una opción para continuar\n>')
-
+    print_menu()
+    inputs = input('Seleccione una opción para continuar\n> ')
     if int(inputs[0]) == 1:
-        print("\nInicializando....")
-        # cont es el controlador que se usará de acá en adelante
-        cont = controller.init()
-
+        t1_start = process_time()
+        print('\nInicializando...')
+        cont = controller.init()  # cont es el controlador que se usará de acá en adelante.
+        print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
     elif int(inputs[0]) == 2:
-        print("\nCargando información de accidentes ....")
-        controller.loadData(cont, file)
-        size = controller.accidentsSize(cont)
-        treeHeight = controller.indexHeight(cont)
-        treeSize = controller.indexSize(cont)
-        minKey = controller.minKey(cont)
-        maxKey = controller.maxKey(cont)
-        print("Accidentes cargados:", size)
-        print("Altura del arbol:", treeHeight)
-        print("Elementos en el arbol:", treeSize)
-        print("Menor llave:", minKey)
-        print("Mayor llave:", maxKey)
+        t1_start = process_time()
+        print('\nCargando información de accidentes...')
+        controller.load_data(cont, accidentsfile)
+        print(f'Accidentes cargados: {controller.accidents_size(cont)}')
+        print(f'Altura del árbol: {controller.index_height(cont)}')
+        print(f'Elementos en el árbol: {controller.index_size(cont)}')
+        print(f'Menor Llave: {controller.min_key(cont)}')
+        print(f'Mayor Llave: {controller.max_key(cont)}')
+        print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
 
     elif int(inputs[0]) == 3:
         print("\nConocer los accidentes en una fecha: ")
         date = input("Fecha: ")
         printAccidentsByDateSeverity(cont, date)
-
+        
     elif int(inputs[0]) == 4:
         print("\nRequerimiento No 2 del reto 3: ")
     
@@ -124,8 +124,14 @@ while True:
     
     elif int(inputs[0]) == 8:
         print("\nRequerimiento No 7 del reto 3: ")
-
     else:
         sys.exit(0)
-sys.exit(0)
-"""
+""" Master    
+    elif int(inputs[0]) == 3:
+        t1_start = process_time()
+        date = input('Fecha a consultar (YYYY-MM-DD): ')
+        print(f'\nBuscando accidentes del {date}...')
+        total = controller.get_accidents_by_date(cont, date)
+        print(f'\nTotal de accidentes en {date}: {total}')
+        print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
+     """

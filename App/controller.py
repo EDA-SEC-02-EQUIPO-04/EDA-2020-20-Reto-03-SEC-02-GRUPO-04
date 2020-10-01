@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
  * Copyright 2020, Departamento de sistemas y Computación
  * Universidad de Los Andes
@@ -35,7 +36,7 @@ recae sobre el controlador.
 
 
 # ___________________________________________________
-#  Inicializacion del catalogo
+#  Inicializacion del catálogo.
 # ___________________________________________________
 
 
@@ -43,48 +44,69 @@ def init():
     """
     Llama la funcion de inicializacion del modelo.
     """
-    analyzer = model.newAnalyzer()
+    analyzer = model.new_analyzer()
     return analyzer
 
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
-#  de datos en los modelos
+#  de datos en los modelos.
 # ___________________________________________________
-""" Alternativa 3
-def loadData(analyzer, accidentsfile):
+
+def load_data(analyzer, accidentsfile):
     """
-    #Carga los datos de los archivos CSV en el modelo
+    Carga los datos de los archivos CSV en el modelo.
     """
-    openFile = open(cf.data_dir + accidentsfile, encoding="utf-8")
-    input_file = csv.DictReader(openFile, delimiter=",")
-    for accident in input_file:
-        model.addAccident(analyzer, accident)
+    accidentsfile = cf.data_dir + accidentsfile
+    with open(accidentsfile, encoding="utf-8") as input_file:
+        reader = csv.DictReader(input_file, delimiter=",")
+        for accident in reader:
+            model.add_accident(analyzer, accident)
     return analyzer
 
+
 # ___________________________________________________
-#  Funciones para consultas
+#  Funciones para consultas.
 # ___________________________________________________
 
+def accidents_size(analyzer):
+    """
+    Número de crímenes leídos.
+    """
+    return model.accidents_size(analyzer)
 
-def accidentsSize(analyzer):
-    return model.accidentsSize(analyzer)
 
-def indexHeight(analyzer):
-    return model.indexHeight(analyzer)
+def index_height(analyzer):
+    """
+    Altura del indice (árbol).
+    """
+    return model.index_height(analyzer)
 
-def indexSize(analyzer):
-    return model.indexSize(analyzer)
 
-def minKey(analyzer):
-    return model.minKey(analyzer)
+def index_size(analyzer):
+    """
+    Numero de nodos en el árbol.
+    """
+    return model.index_size(analyzer)
 
-def maxKey(analyzer):
-    return model.maxKey(analyzer)
 
+def min_key(analyzer):
+    """
+    La menor llave del árbol.
+    """
+    return model.min_key(analyzer)
+
+
+def max_key(analyzer):
+    """
+    La mayor llave del árbol.
+    """
+    return model.max_key(analyzer)
+
+  
 def getAccidentsByDate(analyzer, date):
     return model.getAccidentsByDate(analyzer, date)
 
+  
 def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
-"""
