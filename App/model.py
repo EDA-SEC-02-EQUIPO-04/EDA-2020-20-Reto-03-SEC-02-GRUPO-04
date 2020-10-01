@@ -143,7 +143,6 @@ def new_severity_index(severity_grade):
 # ==============================
 
 
-
 def accidents_size(analyzer):
     """
     Número de accidentes.
@@ -277,6 +276,7 @@ def compare_severities(severity1, severity2):
         return 1
     else:
         return -1
+
 
 """
 Alterntiva 2
@@ -424,4 +424,3 @@ def getAccidentsByRangeCode(analyzer, initialDate, severityCode):
             return m.size(me.getValue(numseverities)['lstseverity'])
     return 0
  """
-

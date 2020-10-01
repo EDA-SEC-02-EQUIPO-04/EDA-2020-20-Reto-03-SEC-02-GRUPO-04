@@ -43,7 +43,6 @@ operación seleccionada.
 accidentsfile = 'us_accidents_small.csv'
 
 
-
 # ___________________________________________________
 #  Funciones Print
 # ___________________________________________________
@@ -82,7 +81,6 @@ def print_menu():
 """
 Menu principal.
 """
-
 
 cont = controller.init()
 while True:
@@ -159,4 +157,3 @@ while True:
         sys.exit(0)
 sys.exit(0)
 """
-
