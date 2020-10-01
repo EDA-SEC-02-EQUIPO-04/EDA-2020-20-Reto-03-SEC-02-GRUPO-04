@@ -60,19 +60,31 @@ def add_accident(analyzer, accident):
     """
     """
     lt.addLast(analyzer['accidents'], accident)
-    update_date_index(analyzer['date_index'], accident)
+    updateDateIndex(analyzer['date_index'], accident)
     return analyzer
 
-
+def updateDateIndex(map, accident):
+    startTime = accident["Start_Time"].split(" ")
+    date = startTime[0]
+    entry = om.get(map, date)
+    if entry:
+        dateEntry = me.getValue(entry)
+    else:
+        dateEntry = new_data_entry()
+        om.put(map, date, dateEntry)
+    add_date_index(dateEntry, accident)
+    return map
+  
+""" Master 
 def update_date_index(map_, accident):
-    """
+    
     Se toma la fecha del accidente y se busca si ya existe en el árbol
     dicha fecha. Si es asi, se adiciona a su lista de accidentes
     y se actualiza el índice de tipos de accidentes.
 
     Si no se encuentra creado un nodo para esa fecha en el árbol
     se crea y se actualiza el índice de tipos de accidentes.
-    """
+    
     occurreddate = accident['Start_Time']
     accidentdate = datetime.datetime.strptime(occurreddate, '%Y-%m-%d %H:%M:%S')
     entry = om.get(map_, accidentdate.date())
@@ -82,7 +94,7 @@ def update_date_index(map_, accident):
     else:
         datentry = me.getValue(entry)
     add_date_index(datentry, accident)
-
+"""
 
 def add_date_index(datentry, accident):
     """
@@ -122,7 +134,7 @@ def new_severity_index(severity_grade):
     seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
     return seventry
 
-
+  
 # ==============================
 # Funciones de consulta.
 # ==============================
@@ -161,11 +173,43 @@ def max_key(analyzer):
     """
     return om.maxKey(analyzer['date_index'])
 
+def getAccidentsByDate(analyzer, date):
+    entry = om.get(analyzer["date_index"], date)
+    dateEntry = me.getValue(entry)
+    accidentsByDate = lt.size(dateEntry["lstaccidents"])
+    return accidentsByDate
 
+def getAccidentsBySeverity(analyzer, date):
+    entry = om.get(analyzer["date_index"], date)
+    dateEntry = me.getValue(entry)
+    try:
+        entryAccidentsBySeverity1 = m.get(dateEntry["severity_index"], "1")
+        accidentsBySeverity1 = me.getValue(entryAccidentsBySeverity1)
+        severity1Size = lt.size(accidentsBySeverity1["lstseverities"])
+    except:
+        severity1Size = 0
+
+    try:
+        entryAccidentsBySeverity2 = m.get(dateEntry["severity_index"], "2")
+        accidentsBySeverity2 = me.getValue(entryAccidentsBySeverity2)
+        severity2Size = lt.size(accidentsBySeverity2["lstseverities"])
+    except:
+        severity2Size = 0
+
+    try: 
+        entryAccidentsBySeverity3 = m.get(dateEntry["severity_index"], "3")
+        accidentsBySeverity3 = me.getValue(entryAccidentsBySeverity3)
+        severity3Size = lt.size(accidentsBySeverity3["lstseverities"])
+    except:
+        severity3Size = 0
+    
+    return severity1Size, severity2Size, severity3Size
+  
+""" Master
 def get_accidents_by_date(analyzer, date):
-    """
-    Retorna el numero de accidentes en una fecha.
-    """
+
+    #Retorna el numero de accidentes en una fecha.
+
     lst = om.get(analyzer['date_index'], date)
     print('\n------------------------------')
     ids = []
@@ -181,7 +225,7 @@ def get_accidents_by_date(analyzer, date):
     print(f'IDs de accidentes del {lst["key"]}:')
     print(f'{ids}')
     return totaccidents
-
+"""
 
 # ==============================
 # Funciones de Comparación.
@@ -192,12 +236,12 @@ def compare_ids(id1, id2):
     Compara dos accidentes
     """
     if id1 == id2:
+
         return 0
     elif id1 > id2:
         return 1
     else:
         return -1
-
 
 def compare_dates(date1, date2):
     """
@@ -209,7 +253,6 @@ def compare_dates(date1, date2):
         return 1
     else:
         return -1
-
 
 def compare_severities(severity1, severity2):
     """

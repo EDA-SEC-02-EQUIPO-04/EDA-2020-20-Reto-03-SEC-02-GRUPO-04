@@ -103,10 +103,10 @@ def max_key(analyzer):
     """
     return model.max_key(analyzer)
 
+  
+def getAccidentsByDate(analyzer, date):
+    return model.getAccidentsByDate(analyzer, date)
 
-def get_accidents_by_date(analyzer, date):
-    """
-    Retorna el total de crimenes en una fecha específica, ordenados por severidad.
-    """
-    date = datetime.datetime.strptime(date, '%Y-%m-%d')
-    return model.get_accidents_by_date(analyzer, date.date())
+  
+def getAccidentsBySeverity(analyzer, date):
+    return model.getAccidentsBySeverity(analyzer, date)

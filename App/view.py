@@ -45,6 +45,18 @@ accidentsfile = 'us_accidents_small.csv'
 
 
 # ___________________________________________________
+#  Funciones Print
+# ___________________________________________________
+
+def printAccidentsByDateSeverity(analyzer, date):
+    accidentsInDate = controller.getAccidentsByDate(analyzer, date)
+    accidentsBySeverity = controller.getAccidentsBySeverity(analyzer, date)
+    print("Total de accidentes ocurridos en la fecha:", accidentsInDate)
+    print("\nAccidentes de severidad 1:", accidentsBySeverity[0])
+    print("Accidentes de severidad 2:", accidentsBySeverity[1])
+    print("Accidentes de severidad 3:", accidentsBySeverity[2])
+
+# ___________________________________________________
 #  Menú principal.
 # ___________________________________________________
 
@@ -52,17 +64,24 @@ accidentsfile = 'us_accidents_small.csv'
 def print_menu():
     print("\n")
     print("*******************************************")
-    print("Bienvenido.")
-    print("1- Inicializar Analizador.")
-    print("2- Cargar información de accidentes.")
-    print("3- Conocer los accidentes en una fecha específica, ordenados por severidad.")
-    print("0- Salir.")
+    print("Bienvenido")
+    print("1- Inicializar Analizador")
+    print("2- Cargar información de accidentes")
+    print("3- Conocer los accidentes en una fecha")
+    print("4- Conocer los accidentes anteriores a una fecha")
+    print("5- Conocer los accidentes en un rango de fechas")
+    print("6- Conocer el estado con más accidentes")
+    print("7- Conocer los accidentes por rango de horas")
+    print("8- Conocer la zona geográfica más accidentada")
+    print("8- Usar el conjunto completo de datos")
+    print("0- Salir")
     print("*******************************************")
 
 
 """
 Menu principal.
 """
+
 cont = controller.init()
 while True:
     print_menu()
@@ -82,6 +101,32 @@ while True:
         print(f'Menor Llave: {controller.min_key(cont)}')
         print(f'Mayor Llave: {controller.max_key(cont)}')
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
+
+    elif int(inputs[0]) == 3:
+        print("\nConocer los accidentes en una fecha: ")
+        date = input("Fecha: ")
+        printAccidentsByDateSeverity(cont, date)
+        
+    elif int(inputs[0]) == 4:
+        print("\nRequerimiento No 2 del reto 3: ")
+    
+    elif int(inputs[0]) == 5:
+        print("\nRequerimiento No 3 del reto 3: ")
+
+    elif int(inputs[0]) == 6:
+        print("\nRequerimiento No 4 del reto 3: ")
+
+    elif int(inputs[0]) == 7:
+        print("\nRequerimiento No 5 del reto 3: ")
+
+    elif int(inputs[0]) == 8:
+        print("\nRequerimiento No 6 del reto 3: ")
+    
+    elif int(inputs[0]) == 8:
+        print("\nRequerimiento No 7 del reto 3: ")
+    else:
+        sys.exit(0)
+""" Master    
     elif int(inputs[0]) == 3:
         t1_start = process_time()
         date = input('Fecha a consultar (YYYY-MM-DD): ')
@@ -89,5 +134,4 @@ while True:
         total = controller.get_accidents_by_date(cont, date)
         print(f'\nTotal de accidentes en {date}: {total}')
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
-    else:
-        sys.exit(0)
+     """
