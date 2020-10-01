@@ -63,6 +63,7 @@ def add_accident(analyzer, accident):
     updateDateIndex(analyzer['date_index'], accident)
     return analyzer
 
+
 def updateDateIndex(map, accident):
     startTime = accident["Start_Time"].split(" ")
     date = startTime[0]
@@ -74,7 +75,8 @@ def updateDateIndex(map, accident):
         om.put(map, date, dateEntry)
     add_date_index(dateEntry, accident)
     return map
-  
+
+
 """ Master 
 def update_date_index(map_, accident):
     
@@ -95,6 +97,7 @@ def update_date_index(map_, accident):
         datentry = me.getValue(entry)
     add_date_index(datentry, accident)
 """
+
 
 def add_date_index(datentry, accident):
     """
@@ -134,7 +137,7 @@ def new_severity_index(severity_grade):
     seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
     return seventry
 
-  
+
 # ==============================
 # Funciones de consulta.
 # ==============================
@@ -173,11 +176,13 @@ def max_key(analyzer):
     """
     return om.maxKey(analyzer['date_index'])
 
+
 def getAccidentsByDate(analyzer, date):
     entry = om.get(analyzer["date_index"], date)
     dateEntry = me.getValue(entry)
     accidentsByDate = lt.size(dateEntry["lstaccidents"])
     return accidentsByDate
+
 
 def getAccidentsBySeverity(analyzer, date):
     entry = om.get(analyzer["date_index"], date)
@@ -196,15 +201,16 @@ def getAccidentsBySeverity(analyzer, date):
     except:
         severity2Size = 0
 
-    try: 
+    try:
         entryAccidentsBySeverity3 = m.get(dateEntry["severity_index"], "3")
         accidentsBySeverity3 = me.getValue(entryAccidentsBySeverity3)
         severity3Size = lt.size(accidentsBySeverity3["lstseverities"])
     except:
         severity3Size = 0
-    
+
     return severity1Size, severity2Size, severity3Size
-  
+
+
 """ Master
 def get_accidents_by_date(analyzer, date):
 
@@ -227,6 +233,7 @@ def get_accidents_by_date(analyzer, date):
     return totaccidents
 """
 
+
 # ==============================
 # Funciones de Comparación.
 # ==============================
@@ -243,6 +250,7 @@ def compare_ids(id1, id2):
     else:
         return -1
 
+
 def compare_dates(date1, date2):
     """
     Compara dos fechas
@@ -253,6 +261,7 @@ def compare_dates(date1, date2):
         return 1
     else:
         return -1
+
 
 def compare_severities(severity1, severity2):
     """
