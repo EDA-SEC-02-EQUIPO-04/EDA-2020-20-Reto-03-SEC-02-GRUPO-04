@@ -44,7 +44,11 @@ def init():
     """
     Llama la funcion de inicializacion del modelo.
     """
-    analyzer = model.new_analyzer()
+
+
+    analyzer = model.new_Analyzer()
+
+
     return analyzer
 
 
@@ -53,7 +57,9 @@ def init():
 #  de datos en los modelos.
 # ___________________________________________________
 
+
 def load_data(analyzer, accidentsfile):
+
     """
     Carga los datos de los archivos CSV en el modelo.
     """
@@ -65,9 +71,11 @@ def load_data(analyzer, accidentsfile):
     return analyzer
 
 
+
 # ___________________________________________________
 #  Funciones para consultas.
 # ___________________________________________________
+
 
 def accidents_size(analyzer):
     """
@@ -110,3 +118,70 @@ def getAccidentsByDate(analyzer, date):
 
 def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
+
+
+"""
+Alterntiva 2
+def accidentsSize(analyzer):
+    
+    # Numero de accidentes leidos
+    
+    return model.accidentsSize(analyzer)
+"""
+"""
+Alterntiva 2
+
+def indexHeight(analyzer):
+    
+    # Altura del indice (arbol)
+    
+    return model.indexHeight(analyzer)
+"""
+"""
+Alterntiva 2
+def indexSize(analyzer):
+    
+    #Numero de nodos en el arbol
+    
+    return model.indexSize(analyzer)
+"""
+"""
+Alterntiva 2
+def minKey(analyzer):
+    
+    #La menor llave del arbol
+    
+    return model.minKey(analyzer)
+"""
+"""
+Alterntiva 2
+def maxKey(analyzer):
+    
+    #La mayor llave del arbol
+    
+    return model.maxKey(analyzer)
+"""
+"""
+Alterntiva 2
+def getAccidentsByRangeCode(analyzer, initialDate, severitycode):
+    
+    #Retorna el total de accidentes de una severidad específica
+    
+    initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
+    return model.getAccidentsByRangeCode(analyzer, initialDate.date(), severitycode)
+"""
+"""
+def load_data(analyzer, accidentsfile):
+
+    # Carga los datos de los archivos CSV en el modelo
+    
+    dialect, dialect.delimiter = csv.excel, ','
+    input_file = csv.DictReader(open(accidentsfile, encoding='utf-8-sig'), dialect=dialect)
+  
+    
+    for accident in input_file:
+        model.addAccident(analyzer, accident)
+    
+    return analyzer
+"""
+

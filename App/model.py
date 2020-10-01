@@ -40,7 +40,7 @@ es decir contiene los modelos con los datos en memoria.
 # API del TAD Catálogo de accidentes.
 # -----------------------------------------------------
 
-def new_analyzer():
+def new_Analyzer():
     """ Inicializa el analizador
 
     Crea una lista vacia para guardar todos los accidentes
@@ -142,6 +142,8 @@ def new_severity_index(severity_grade):
 # Funciones de consulta.
 # ==============================
 
+
+
 def accidents_size(analyzer):
     """
     Número de accidentes.
@@ -242,8 +244,7 @@ def compare_ids(id1, id2):
     """
     Compara dos accidentes
     """
-    if id1 == id2:
-
+    if (id1 == id2):
         return 0
     elif id1 > id2:
         return 1
@@ -258,6 +259,7 @@ def compare_dates(date1, date2):
     if date1 == date2:
         return 0
     elif date1 > date2:
+
         return 1
     else:
         return -1
@@ -266,6 +268,7 @@ def compare_dates(date1, date2):
 def compare_severities(severity1, severity2):
     """
     Compara dos severidades de accidentes.
+
     """
     severity = me.getKey(severity2)
     if severity1 == severity:
@@ -274,3 +277,151 @@ def compare_severities(severity1, severity2):
         return 1
     else:
         return -1
+
+"""
+Alterntiva 2
+
+def newAnalyser():
+     #Inicializa el analizador
+
+
+    #Crea una lista vacia para guardar todos los accidentes
+    #Se crean indices (Maps) por los siguientes criterios:
+    #-Fechas
+
+    #Retorna el analizador inicializado.
+    
+    analyser = {'severity':lt.newList('SINGLE_LINKED', compareids),
+                'date': om.newMap(omaptype ='BST', comparefunction = compareDates)}
+    return analyser
+
+# Funciones para agregar informacion al catalogo
+
+Alterntiva 2
+def addAccident(analyzer, accident):
+    
+    lt.addLast(analyzer['severity'], accident)
+    updateDateIndex(analyzer['date'], accident)
+    return analyzer
+"""
+"""
+Alterntiva 2
+def updateDateIndex(map, accident):
+    
+    #Se toma la fecha del accidente y se busca si ya existe en el arbol
+    #dicha fecha.  Si es asi, se adiciona a su lista de accidentes
+    #y se actualiza el indice de la severidad de los accidentes.
+
+    #Si no se encuentra creado un nodo para esa fecha en el arbol
+    #se crea y se actualiza el indice de la severidad de los accidentes
+    
+    
+    ocurreddate = accident['Start_Time']
+    accidentDate = datetime.datetime.strptime(ocurreddate, '%Y-%m-%d %H:%M:%S')
+    entry = om.get(map, accidentDate.date())
+    if entry is None:
+        datentry = newDataEntry(accident)
+        om.put(map, accidentDate.date(), datentry)
+    else: 
+        datentry = me.getValue(entry)
+    addDateIndex(datentry, accident)
+    
+    return map
+"""
+"""
+Alterntiva 2
+def addDateIndex(datentry, accident):
+    
+    #Actualiza un indice de la severidad del accidente. Este indice tiene una lista
+    #de las severidades y una tabla de hash cuya llave a severidad del accidente y
+    #el valor es una lista con los accidentes de dicho tipo en la fecha que
+    #se está consultando (dada por el nodo del arbol)
+    
+    lst = datentry['lstaccidents']
+    lt.addLast(lst, accident)
+    severityIndex = datentry['severityIndex']
+    offentry = m.get(severityIndex, accident['Severity'])
+    if offentry is None:
+        entry = newoffenseEntry(accident['Severity'], accident)
+        lt.addLast(entry['lstseverity'], accident)
+        m.put(severityIndex, accident['Severity'], entry)
+    else:
+        entry = me.getValue(offentry)
+        lt.addLast(entry['lstseverity'], accident)
+    return datentry
+"""
+"""
+Alterntiva 2
+def newDataEntry(accident):
+    
+    #Crea una entrada en el indice por fechas, es decir en el arbol
+    #binario
+    
+    entry = {'severityIndex': None, 'lstaccidents': None}
+    entry['severityIndex'] = m.newMap(numelements=30,
+                                     maptype='PROBING',
+                                     comparefunction=compareseverities)
+    entry['lstaccidents'] = lt.newList('SINGLE_LINKED', compareDates)
+    return entry
+"""
+
+"""
+Alterntiva 2
+def newoffenseEntry(severitygrp, accident):
+    
+    #Crea una entrada en el indice por la severidad del accidente, es decir, en
+    #la tabla de hash, que se encuentra en cada nodo del arbol.
+    
+
+    seventry = {'severity': None, 'lstseverity': None}
+    seventry['severity'] = severitygrp
+    seventry['lstseverity'] = lt.newList('SINGLE_LINKED', compareseverities)
+    return seventry
+"""
+
+"""
+Alterntiva 2
+def accidentsSize(analyzer):
+    
+    #Número de libros en el catago
+    
+    return lt.size(analyzer['severity'])
+
+Alterntiva 2
+def indexHeight(analyzer):
+    
+    #Numero de autores leido
+    
+    return om.height(analyzer['date'])
+
+
+def indexSize(analyzer):
+    #Numero de autores leido
+    
+    return om.size(analyzer['date'])
+
+
+def minKey(analyzer):
+    #Numero de autores leido
+    
+    return om.minKey(analyzer['date'])
+
+
+def maxKey(analyzer):
+    #Numero de autores leido
+    
+    return om.maxKey(analyzer['date'])
+
+def getAccidentsByRangeCode(analyzer, initialDate, severityCode):
+    
+    #Para una fecha determinada, retorna el numero de accidentes
+    según una severidad
+        accidentDate = om.get(analyzer['date'], initialDate)
+    if accidentDate['key'] is not None:
+        severitymap = me.getValue(accidentDate)['severityIndex']
+        numseverities = m.get(severitymap, severityCode)
+        if numseverities is not None:
+            return m.size(me.getValue(numseverities)['lstseverity'])
+    return 0
+ """
+

@@ -40,8 +40,8 @@ operación seleccionada.
 #  Ruta a los archivos.
 # ___________________________________________________
 
-
 accidentsfile = 'us_accidents_small.csv'
+
 
 
 # ___________________________________________________
@@ -83,6 +83,7 @@ def print_menu():
 Menu principal.
 """
 
+
 cont = controller.init()
 while True:
     print_menu()
@@ -93,6 +94,7 @@ while True:
         cont = controller.init()  # cont es el controlador que se usará de acá en adelante.
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
     elif int(inputs[0]) == 2:
+
         t1_start = process_time()
         print('\nCargando información de accidentes...')
         controller.load_data(cont, accidentsfile)
@@ -136,3 +138,25 @@ while True:
         print(f'\nTotal de accidentes en {date}: {total}')
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
      """
+
+""" Aternativa 2
+        print("\nCargando información de los accidentes ....")
+        controller.loadData(cont, accidentsfile) 
+        print('Accidentes cargados: ' + str(controller.accidentsSize(cont)))
+        print('Altura del arbol: ' + str(controller.indexHeight(cont)))
+        print('Elementos en el arbol: ' + str(controller.indexSize(cont)))
+        print('Menor Llave: ' + str(controller.minKey(cont)))
+        print('Mayor Llave: ' + str(controller.maxKey(cont)))
+
+    elif int(inputs[0]) == 3:
+        print("\n Buscar accidentes en un grupo de segveridad en un fecha: ")
+        initialDate = input("Fecha (YYYY-MM-DD): ")
+        severity = input("Severidad: ")
+        numberseverities = controller.getAccidentsByRangeCode(cont, initialDate, severity)
+        print("\nTotal de accidentes de severidad: " + severity + " en esa fecha:  " +
+              str(numberseverities))
+    else:
+        sys.exit(0)
+sys.exit(0)
+"""
+
