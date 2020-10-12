@@ -1,4 +1,4 @@
-# Laboratorio #7
+# Laboratorio #8
 
 ### Tablas de símbolos ordenadas
 
