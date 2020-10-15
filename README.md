@@ -1,4 +1,4 @@
-# Laboratorio #8
+# Reto 3
 
 ### Tablas de símbolos ordenadas y balanceadas
 
