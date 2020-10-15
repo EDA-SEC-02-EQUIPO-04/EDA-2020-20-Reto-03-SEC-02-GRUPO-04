@@ -1,4 +1,4 @@
-# Laboratorio #7
+# Reto 3
 
 ### Tablas de símbolos ordenadas
 
