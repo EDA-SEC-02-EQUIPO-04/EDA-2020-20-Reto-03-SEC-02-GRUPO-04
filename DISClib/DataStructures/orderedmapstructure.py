@@ -370,6 +370,6 @@ def values(map, keylo, keyhi):
         Exception
     """
     if (map['type'] == 'BST'):
-        return bst.valueRange(map, keylo, keyhi)
+        return bst.values(map, keylo, keyhi)
     else:
-        return rbt.valueRange(map, keylo, keyhi)
+        return rbt.values(map, keylo, keyhi)

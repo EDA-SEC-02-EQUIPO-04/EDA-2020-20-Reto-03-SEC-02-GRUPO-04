@@ -126,4 +126,3 @@ while True:
     elif int(inputs[0]) == 9:
         print("\nRequerimiento No 7 del reto 3: ")
     else:
-

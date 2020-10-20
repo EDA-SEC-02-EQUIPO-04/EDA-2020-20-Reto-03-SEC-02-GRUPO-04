@@ -77,8 +77,6 @@ def updateDateIndex(map, accident):
     return map
 
 
-
-
 def add_date_index(datentry, accident):
     """
     Actualiza un indice de tipo de accidentes. Este índice tiene una lista
@@ -190,7 +188,6 @@ def getAccidentsBySeverity(analyzer, date):
         severity3Size = 0
 
     return severity1Size, severity2Size, severity3Size
-
 
 
 # ==============================
