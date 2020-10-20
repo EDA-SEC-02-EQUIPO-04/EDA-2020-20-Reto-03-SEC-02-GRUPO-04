@@ -111,7 +111,14 @@ while True:
         printAccidentsByDateSeverity(cont, date)
 
     elif int(inputs[0]) == 4:
-        print("\nRequerimiento No 2 del reto 3: ")
+        print("\n Conocer los accidentes anteriores a una fecha: ")
+        finalDate = input('Fecha (YYYY-MM-DD):')
+        initialDate = controller.min_key(cont)
+        print(type(initialDate))
+        print(type(finalDate))
+        total = controller.getCrimesByRange(cont,initialDate, finalDate)
+        print('\n Se tuvieron'+ str(total) + 'accidentes anteriores a'+ finalDate)
+
 
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")

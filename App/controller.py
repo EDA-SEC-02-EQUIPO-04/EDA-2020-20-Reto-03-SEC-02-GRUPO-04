@@ -45,9 +45,7 @@ def init():
     Llama la funcion de inicializacion del modelo.
     """
 
-
     analyzer = model.new_Analyzer()
-
 
     return analyzer
 
@@ -118,3 +116,14 @@ def getAccidentsByDate(analyzer, date):
 
 def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
+
+def getCrimesByRange (analyzer, initialDate, finalDate):
+    """
+    Retorna el número de accidentes en un rango de fechas,
+    la fecha final el la que da el usuario al programa y la inicial
+    es la menor fecha de la que se tenga registro.
+    """
+    initialDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
+    finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
+    return (model.getAccidentsByRange(analyzer, initialDate.date(), finalDate.date()))
+

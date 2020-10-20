@@ -54,6 +54,23 @@ def new_Analyzer():
     return analyzer
 
 
+def new_data_entry():
+    """
+    Crea una entrada en el indice por fechas, es decir en el árbol
+    binario.
+    """
+    entry = {'severity_index': m.newMap(numelements=3, maptype='PROBING', comparefunction=compare_severities),
+             'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
+    return entry
+
+
+def new_severity_index(severity_grade):
+    """
+    Crea una entrada en el indice por tipo de severidad, es decir en
+    la tabla de hash, que se encuentra en cada nodo del árbol.
+    """
+    seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
+    return seventry
 # Funciones para agregar información al catálogo.
 
 def add_accident(analyzer, accident):
@@ -97,29 +114,11 @@ def add_date_index(datentry, accident):
         lt.addLast(entry['lstseverities'], accident)
 
 
-def new_data_entry():
-    """
-    Crea una entrada en el indice por fechas, es decir en el árbol
-    binario.
-    """
-    entry = {'severity_index': m.newMap(numelements=3, maptype='PROBING', comparefunction=compare_severities),
-             'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
-    return entry
-
-
-def new_severity_index(severity_grade):
-    """
-    Crea una entrada en el indice por tipo de severidad, es decir en
-    la tabla de hash, que se encuentra en cada nodo del árbol.
-    """
-    seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
-    return seventry
 
 
 # ==============================
 # Funciones de consulta.
 # ==============================
-
 
 
 def accidents_size(analyzer):
@@ -190,6 +189,26 @@ def getAccidentsBySeverity(analyzer, date):
 
     return severity1Size, severity2Size, severity3Size
 
+def getAccidentsByRange(analyzer, initialDate, finalDate): # Para el requerimiento 2
+    """
+    Retorna el número de accidentes en un rango de fechas,
+    la fecha final el la que da el usuario al programa y la inicial
+    es la menor fecha de la que se tenga registro.
+    """ 
+    lst = om.values(analyzer['date_index'], initialDate, finalDate)
+    lstiterator = it.newIterator(lst)
+    totalaccidents = 0    
+    while (it.hasNext(lstiterator)):
+        lstdate = it.next(lstiterator)  
+        totalaccidents += lt.size(lstdate['lstaccidents'])
+    return totalaccidents
+
+def getAccidentsByrnk(analyzer, finalDate):
+    number = om.rank(analyzer['date_index'], finalDate)
+    return number
+
+
+
 # ==============================
 # Funciones de Comparación.
 # ==============================
@@ -212,11 +231,12 @@ def compare_dates(date1, date2):
     """
     if date1 == date2:
         return 0
-    elif date1 > date2:
+    elif (date1 > date2):
 
         return 1
     else:
         return -1
+
 
 
 def compare_severities(severity1, severity2):
@@ -231,4 +251,3 @@ def compare_severities(severity1, severity2):
         return 1
     else:
         return -1
-
