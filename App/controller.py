@@ -114,3 +114,6 @@ def getAccidentsByDate(analyzer, date):
 
 def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
+
+def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
+    return model.get_accidents_severity_by_hour_range(analyzer, keylo, keyhi)

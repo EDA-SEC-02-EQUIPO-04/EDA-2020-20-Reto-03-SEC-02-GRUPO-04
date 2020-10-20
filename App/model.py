@@ -50,7 +50,9 @@ def new_Analyzer():
     Retorna el analizador inicializado.
     """
     analyzer = {'accidents': lt.newList('SINGLE_LINKED', compare_ids),
-                'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates)}
+                'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates),
+                "hour_index": om.newMap(omaptype="RBT", comparefunction=compare_hours)
+                }
     return analyzer
 
 
@@ -61,6 +63,7 @@ def add_accident(analyzer, accident):
     """
     lt.addLast(analyzer['accidents'], accident)
     updateDateIndex(analyzer['date_index'], accident)
+    update_hour_index(analyzer["hour_index"], accident)
     return analyzer
 
 
@@ -77,6 +80,25 @@ def updateDateIndex(map, accident):
     return map
 
 
+def update_hour_index(map, accident):
+    startTime = accident["Start_Time"].split(" ")
+    h_m_s = startTime[1].split(":") #Horas, minutos, segundos
+    h = h_m_s[0] #Horas
+    m = h_m_s[1] #Minutos
+
+    if int(m) < 30:
+        hour_index = h + ":00"
+    else: 
+        hour_index = h + ":30"
+
+    entry = om.get(map, hour_index)
+    if entry:
+        hour_entry = me.getValue(entry)
+    else:
+        hour_entry = new_hour_entry()
+        om.put(map, hour_index, hour_entry)
+    add_hour_index(hour_entry, accident)
+    return map
 
 
 def add_date_index(datentry, accident):
@@ -99,6 +121,20 @@ def add_date_index(datentry, accident):
         lt.addLast(entry['lstseverities'], accident)
 
 
+def add_hour_index(hour_entry, accident):
+    lst = hour_entry['lst_accidents']
+    lt.addLast(lst, accident)
+    severity_index = hour_entry['severity_index']
+    seventry = m.get(severity_index, accident['Severity'])
+    if seventry is None:
+        entry = new_severity_index(accident['Severity'])
+        lt.addLast(entry['lstseverities'], accident)
+        m.put(severity_index, accident['Severity'], entry)
+    else:
+        entry = me.getValue(seventry)
+        lt.addLast(entry['lstseverities'], accident)
+
+
 def new_data_entry():
     """
     Crea una entrada en el indice por fechas, es decir en el árbol
@@ -106,6 +142,17 @@ def new_data_entry():
     """
     entry = {'severity_index': m.newMap(numelements=3, maptype='PROBING', comparefunction=compare_severities),
              'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
+    return entry
+
+
+def new_hour_entry():
+    """
+    Crea una entrada en el indice por horas, es decir en el árbol
+    binario.
+    """
+    entry = {"severity_index": m.newMap(numelements=4, maptype='PROBING', comparefunction=compare_severities),
+             "lst_accidents": lt.newList("SINGLE_LINKED", compare_hours)
+             }
     return entry
 
 
@@ -192,6 +239,35 @@ def getAccidentsBySeverity(analyzer, date):
     return severity1Size, severity2Size, severity3Size
 
 
+def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
+    entry = om.get(analyzer["hour_index"], "05:30")
+    hour_range = om.values(analyzer["hour_index"], keylo, keyhi)
+    iterator = it.newIterator(hour_range)
+    severity_1 = 0
+    severity_2 = 0
+    severity_3 = 0
+    severity_4 = 0
+    while it.hasNext(iterator):
+        hour = it.next(iterator)
+        entry = om.get(analyzer["hour_index"], hour)
+        hour_entry = me.getValue(entry)
+        for severity_number in range(1,5):
+            severity_entry = m.get(hour_entry["severity_index"], str(severity_number))
+            if severity_entry != None:
+                severity = me.getValue(severity_entry)
+                size = lt.size(severity["lstseverities"])
+                if severity_number == 1:
+                    severity_1 = severity_1 + size
+                elif severity_number == 2:
+                    severity_2 = severity_2 + size
+                elif severity_number == 3:
+                    severity_3 = severity_3 + size
+                else:
+                    severity_4 = severity_4 + size
+                total = severity_1 + severity_2 + severity_3 + severity_4
+            else:
+                pass
+    return total, severity_1, severity_2, severity_3, severity_4
 
 # ==============================
 # Funciones de Comparación.
@@ -221,6 +297,18 @@ def compare_dates(date1, date2):
     else:
         return -1
 
+
+def compare_hours(hour1, hour2):
+    """
+    Compara dos horas
+    """
+    if hour1 == hour2:
+        return 0
+    elif hour1 > hour2:
+        return 1
+    else:
+        return -1
+    
 
 def compare_severities(severity1, severity2):
     """

@@ -55,6 +55,23 @@ def printAccidentsByDateSeverity(analyzer, date):
     print("Accidentes de severidad 2:", accidentsBySeverity[1])
     print("Accidentes de severidad 3:", accidentsBySeverity[2])
 
+def print_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
+    accidents_severity_by_hour_range = controller.get_accidents_severity_by_hour_range(analyzer, keylo, keyhi)
+    total = accidents_severity_by_hour_range[0]
+    severity_1 = accidents_severity_by_hour_range[1]
+    severity_2 = accidents_severity_by_hour_range[2]
+    severity_3 = accidents_severity_by_hour_range[3]
+    severity_4 = accidents_severity_by_hour_range[4]
+    print("Total de accidentes en el rango horario:", total)
+    print("\nAccidentes de severidad 1:", severity_1)
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_1/total)*100, 1), "%")
+    print("\nAccidentes de severidad 2:", severity_2)
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_2/total)*100, 1), "%")
+    print("\nAccidentes de severidad 3:", severity_3)
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_3/total)*100, 1), "%")
+    print("\nAccidentes de severidad 4:", severity_4)
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_4/total)*100, 1), "%")
+
 
 # ___________________________________________________
 #  Menú principal.
@@ -118,7 +135,10 @@ while True:
         print("\nRequerimiento No 4 del reto 3: ")
 
     elif int(inputs[0]) == 7:
-        print("\nRequerimiento No 5 del reto 3: ")
+        print("\nConocer los accidentes por rango de horas:")
+        keylo = input("Ingrese la hora inicial: ")
+        keyhi = input("Ingrese la hora final: ")
+        print_accidents_severity_by_hour_range(cont, keylo, keyhi)
 
     elif int(inputs[0]) == 8:
         print("\nRequerimiento No 6 del reto 3: ")
@@ -126,4 +146,4 @@ while True:
     elif int(inputs[0]) == 9:
         print("\nRequerimiento No 7 del reto 3: ")
     else:
-
+        sys.exit(0)
