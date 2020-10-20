@@ -311,4 +311,4 @@ def values(map, keylo, keyhi):
     Raises:
         Exception
     """
-    return om.keys(map, keylo, keyhi)
+    return om.values(map, keylo, keyhi)

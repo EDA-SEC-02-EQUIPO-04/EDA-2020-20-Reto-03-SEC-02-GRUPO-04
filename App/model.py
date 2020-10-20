@@ -80,6 +80,7 @@ def updateDateIndex(map, accident):
     return map
 
 
+
 def update_hour_index(map, accident):
     startTime = accident["Start_Time"].split(" ")
     h_m_s = startTime[1].split(":") #Horas, minutos, segundos
@@ -99,6 +100,7 @@ def update_hour_index(map, accident):
         om.put(map, hour_index, hour_entry)
     add_hour_index(hour_entry, accident)
     return map
+
 
 
 def add_date_index(datentry, accident):
@@ -207,13 +209,27 @@ def max_key(analyzer):
 
 def getAccidentsByDate(analyzer, date):
     entry = om.get(analyzer["date_index"], date)
+    if entry is None:
+        return 0
     dateEntry = me.getValue(entry)
     accidentsByDate = lt.size(dateEntry["lstaccidents"])
     return accidentsByDate
 
 
+def get_accidents_by_date_range(analyzer, initial_date, final_date):
+    walking_date = initial_date
+    accidents_on_range = 0
+    while walking_date <= final_date:
+        date = walking_date.strftime('%Y-%m-%d')
+        accidents_on_range += getAccidentsByDate(analyzer, date)
+        walking_date += datetime.timedelta(days=1)
+    return accidents_on_range
+
+
 def getAccidentsBySeverity(analyzer, date):
     entry = om.get(analyzer["date_index"], date)
+    if entry is None:
+        return 0, 0, 0
     dateEntry = me.getValue(entry)
     try:
         entryAccidentsBySeverity1 = m.get(dateEntry["severity_index"], "1")
@@ -237,6 +253,20 @@ def getAccidentsBySeverity(analyzer, date):
         severity3Size = 0
 
     return severity1Size, severity2Size, severity3Size
+
+
+
+def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
+    walking_date = initial_date
+    severities_on_range = [0, 0, 0]
+    while walking_date <= final_date:
+        date = walking_date.strftime('%Y-%m-%d')
+        actual_severities = getAccidentsBySeverity(analyzer, date)
+        severities_on_range[0] += actual_severities[0]
+        severities_on_range[1] += actual_severities[1]
+        severities_on_range[2] += actual_severities[2]
+        walking_date += datetime.timedelta(days=1)
+    return severities_on_range
 
 
 def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
@@ -268,6 +298,7 @@ def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
             else:
                 pass
     return total, severity_1, severity_2, severity_3, severity_4
+
 
 # ==============================
 # Funciones de Comparación.

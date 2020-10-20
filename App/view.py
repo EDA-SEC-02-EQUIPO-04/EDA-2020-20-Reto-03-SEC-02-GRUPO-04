@@ -40,7 +40,8 @@ operación seleccionada.
 #  Ruta a los archivos.
 # ___________________________________________________
 
-accidentsfile = 'us_accidents_small.csv'
+# accidentsfile = 'us_accidents_small.csv'
+accidentsfile = 'us_accidents_dis_2016.csv'
 
 
 # ___________________________________________________
@@ -72,6 +73,20 @@ def print_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
     print("\nAccidentes de severidad 4:", severity_4)
     print("Porcentaje contra el total de accidentes reportados:", round((severity_4/total)*100, 1), "%")
 
+
+def print_accidents_by_date_range(analyzer, initial_date, final_date):
+    accidents_in_range = controller.get_accidents_by_date_range(analyzer, initial_date, final_date)
+    accidents_range_by_severity = controller.get_accidentes_range_by_severity(analyzer, initial_date, final_date)
+    print('Total de accidentes ocurridos en el rango de la fecha:', accidents_in_range)
+    print('\nAccidentes de severidad 1:', accidents_range_by_severity[0])
+    print('Accidentes de severidad 2:', accidents_range_by_severity[1])
+    print('Accidentes de severidad 3:', accidents_range_by_severity[2])
+    if accidents_range_by_severity[0] > accidents_range_by_severity[1] > accidents_range_by_severity[2]:
+        print('\nEn este rango de fechas los accidentes más reportados son de tipo 1')
+    elif accidents_range_by_severity[1] > accidents_range_by_severity[2]:
+        print('\nEn este rango de fechas los accidentes más reportados son de tipo 2')
+    else:
+        print('\nEn este rango de fechas los accidentes más reportados son de tipo 3')
 
 # ___________________________________________________
 #  Menú principal.
@@ -109,7 +124,6 @@ while True:
         cont = controller.init()  # cont es el controlador que se usará de acá en adelante.
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
     elif int(inputs[0]) == 2:
-
         t1_start = process_time()
         print('\nCargando información de accidentes...')
         controller.load_data(cont, accidentsfile)
@@ -119,30 +133,26 @@ while True:
         print(f'Menor Llave: {controller.min_key(cont)}')
         print(f'Mayor Llave: {controller.max_key(cont)}')
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
-
     elif int(inputs[0]) == 3:
         print("\nConocer los accidentes en una fecha: ")
         date = input("Fecha: ")
         printAccidentsByDateSeverity(cont, date)
-
     elif int(inputs[0]) == 4:
         print("\nRequerimiento No 2 del reto 3: ")
-
     elif int(inputs[0]) == 5:
-        print("\nRequerimiento No 3 del reto 3: ")
-
+        print("\nConocer los accidentes en un rango de fechas: ")
+        initial_date = input("Fecha inicial: ")
+        final_date = input("Fecha final: ")
+        print_accidents_by_date_range(cont, initial_date, final_date)
     elif int(inputs[0]) == 6:
         print("\nRequerimiento No 4 del reto 3: ")
-
     elif int(inputs[0]) == 7:
         print("\nConocer los accidentes por rango de horas:")
         keylo = input("Ingrese la hora inicial: ")
         keyhi = input("Ingrese la hora final: ")
         print_accidents_severity_by_hour_range(cont, keylo, keyhi)
-
     elif int(inputs[0]) == 8:
         print("\nRequerimiento No 6 del reto 3: ")
-
     elif int(inputs[0]) == 9:
         print("\nRequerimiento No 7 del reto 3: ")
     else:
