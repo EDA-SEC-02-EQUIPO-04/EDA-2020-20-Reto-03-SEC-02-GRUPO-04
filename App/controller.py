@@ -114,3 +114,15 @@ def getAccidentsByDate(analyzer, date):
 
 def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
+
+
+def get_accidents_by_date_range(analyzer, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.get_accidents_by_date_range(analyzer, initial_date, final_date)
+
+
+def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.get_accidentes_range_by_severity(analyzer, initial_date, final_date)
