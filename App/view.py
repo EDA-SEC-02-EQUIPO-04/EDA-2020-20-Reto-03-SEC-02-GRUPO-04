@@ -118,7 +118,7 @@ while True:
         printAccidentsByDateSeverity(cont, date)
 
     elif int(inputs[0]) == 4:
-        print("\n Conocer los accidentes anteriores a una fecha: ")
+        print("\n Conocer los accidentes anteriores a una fecha: \n")
         year = input('Ingrese el año (YYYY): ')
         month = input('Ingrese el mes (MM): ')
         day = input('Ingrese el día (DD): ')

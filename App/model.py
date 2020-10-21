@@ -72,6 +72,7 @@ def new_severity_index(severity_grade):
     """
     seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
     return seventry
+
 # Funciones para agregar información al catálogo.
 
 def add_accident(analyzer, accident):
@@ -192,7 +193,7 @@ def getAccidentsBySeverity(analyzer, date):
     return severity1Size, severity2Size, severity3Size
 
 
-def getAccidentsByRange(analyzer, initialDate, finalDate): # Para el requerimiento 2
+def getAccidentsByRange(analyzer, initialDate, finalDate): 
     """
     Retorna el número de accidentes en un rango de fechas,
     la fecha final el la que da el usuario al programa y la inicial
@@ -203,13 +204,8 @@ def getAccidentsByRange(analyzer, initialDate, finalDate): # Para el requerimien
     totalaccidents = 0  
     while it.hasNext(lstiterator):
         lstdate = it.next(lstiterator) 
-        totalaccidents += lt.size(lstdate['lstaccidents'])
-    
-    mayor = collections.Counter(lst)
-
+        totalaccidents += lt.size(lstdate['lstaccidents'])       
     return totalaccidents
-
-
 
 
 # ==============================
