@@ -27,6 +27,7 @@ from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
 from DISClib.DataStructures import listiterator as it
 import datetime
+import collections
 
 assert config
 
@@ -54,7 +55,7 @@ def new_Analyzer():
     return analyzer
 
 
-def new_data_entry():
+def new_data_entry(accident):
     """
     Crea una entrada en el indice por fechas, es decir en el árbol
     binario.
@@ -83,13 +84,14 @@ def add_accident(analyzer, accident):
 
 def updateDateIndex(map, accident):
     startTime = accident["Start_Time"]
-    date = datetime.datetime.strptime(startTime,'%Y-%m-%d %H:%M:%S')
-    entry = om.get(map, date.date())
+    complete_date = datetime.datetime.strptime(startTime,'%Y-%m-%d %H:%M:%S')
+    date = datetime.date(complete_date.year, complete_date.month, complete_date.day)
+    entry = om.get(map, date)
     if entry:
         dateEntry = me.getValue(entry)
     else:
-        dateEntry = new_data_entry()
-        om.put(map, date.date(), dateEntry)
+        dateEntry = new_data_entry(accident)
+        om.put(map, date, dateEntry)
     add_date_index(dateEntry, accident)
     return map
 
@@ -189,25 +191,26 @@ def getAccidentsBySeverity(analyzer, date):
 
     return severity1Size, severity2Size, severity3Size
 
+
 def getAccidentsByRange(analyzer, initialDate, finalDate): # Para el requerimiento 2
     """
     Retorna el número de accidentes en un rango de fechas,
     la fecha final el la que da el usuario al programa y la inicial
     es la menor fecha de la que se tenga registro.
-    """ 
-    print(type(initialDate))
-    print(type(finalDate))
+    """
     lst = om.values(analyzer['date_index'], initialDate, finalDate)
     lstiterator = it.newIterator(lst)
-    totalaccidents = 0    
-    while (it.hasNext(lstiterator)):
-        lstdate = it.next(lstiterator)  
+    totalaccidents = 0  
+    while it.hasNext(lstiterator):
+        lstdate = it.next(lstiterator) 
         totalaccidents += lt.size(lstdate['lstaccidents'])
     
-    
-
+    mayor = collections.Counter(lst)
 
     return totalaccidents
+
+
+
 
 # ==============================
 # Funciones de Comparación.

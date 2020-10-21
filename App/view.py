@@ -56,6 +56,13 @@ def printAccidentsByDateSeverity(analyzer, date):
     print("Accidentes de severidad 2:", accidentsBySeverity[1])
     print("Accidentes de severidad 3:", accidentsBySeverity[2])
 
+def printdates(n):
+    if n < '10':
+        number = '0'+str(n)
+    else:
+        number = n
+    return n
+
 
 # ___________________________________________________
 #  Menú principal.
@@ -112,11 +119,16 @@ while True:
 
     elif int(inputs[0]) == 4:
         print("\n Conocer los accidentes anteriores a una fecha: ")
-        finalDate = input('Fecha (YYYY-MM-DD):')
-        initialDate = controller.min_key(cont)
+        year = input('Ingrese el año (YYYY): ')
+        month = input('Ingrese el mes (MM): ')
+        day = input('Ingrese el día (DD): ')
+        if day == '01':
+            finalDate = year+'-'+month+'-'+str(int(day))
+        else:
+            finalDate = year+'-'+month+'-'+str(int(day)-1) 
+        initialDate = str(controller.min_key(cont))
         total = controller.getCrimesByRange(cont,initialDate, finalDate)
-        print('\n Se tuvieron '+ str(total) + ' accidentes anteriores a '+ finalDate)
-
+        print('\n Se tuvieron '+ str(total) + ' accidentes anteriores a '+  year+'-'+month+'-'+printdates(day))
 
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")

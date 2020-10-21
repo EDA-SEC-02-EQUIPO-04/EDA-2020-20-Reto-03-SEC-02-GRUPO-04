@@ -42,7 +42,7 @@ def newMap(omaptype, comparefunction):
     Raises:
         Exception
     """
-    if (omaptype == 'BST'):
+    if (omaptype == 'RBT'):
         return bst.newMap(comparefunction)
     else:
         return rbt.newMap(comparefunction)
@@ -312,10 +312,10 @@ def rank(map, key):
     Raises:
         Exception
     """
-    if (map['type'] == 'BST'):
-        return bst.rank(map, key)
-    else:
+    if (map['type'] == 'RBT'):
         return rbt.rank(map, key)
+    else:
+        return bst.rank(map, key)
 
 
 def keys(map, keylo, keyhi):
