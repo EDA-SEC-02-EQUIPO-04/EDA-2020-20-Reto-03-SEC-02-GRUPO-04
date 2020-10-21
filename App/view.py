@@ -114,10 +114,8 @@ while True:
         print("\n Conocer los accidentes anteriores a una fecha: ")
         finalDate = input('Fecha (YYYY-MM-DD):')
         initialDate = controller.min_key(cont)
-        print(type(initialDate))
-        print(type(finalDate))
         total = controller.getCrimesByRange(cont,initialDate, finalDate)
-        print('\n Se tuvieron'+ str(total) + 'accidentes anteriores a'+ finalDate)
+        print('\n Se tuvieron '+ str(total) + ' accidentes anteriores a '+ finalDate)
 
 
     elif int(inputs[0]) == 5:

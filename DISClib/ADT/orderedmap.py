@@ -25,9 +25,9 @@
  *
  """
 
+
 import config
 from DISClib.DataStructures import orderedmapstructure as om
-
 assert config
 
 
@@ -311,4 +311,4 @@ def values(map, keylo, keyhi):
     Raises:
         Exception
     """
-    return om.keys(map, keylo, keyhi)
+    return om.values(map, keylo, keyhi)

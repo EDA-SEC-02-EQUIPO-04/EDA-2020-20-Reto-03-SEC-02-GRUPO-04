@@ -27,7 +27,6 @@
 
 import config
 from DISClib.ADT import list as lt
-
 assert config
 
 
@@ -35,7 +34,7 @@ def inorder(omap):
     if (omap is not None):
         lst = lt.newList('SINGLE_LINKED', omap['cmpfunction'])
         lst = inorderTree(omap['root'], lst)
-    return omap
+    return lst
 
 
 def preorder(omap):

@@ -123,7 +123,7 @@ def getCrimesByRange (analyzer, initialDate, finalDate):
     la fecha final el la que da el usuario al programa y la inicial
     es la menor fecha de la que se tenga registro.
     """
-    initialDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
+    initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
     finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
     return (model.getAccidentsByRange(analyzer, initialDate.date(), finalDate.date()))
 

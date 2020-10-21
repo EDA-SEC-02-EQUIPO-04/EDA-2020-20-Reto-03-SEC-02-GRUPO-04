@@ -82,14 +82,14 @@ def add_accident(analyzer, accident):
 
 
 def updateDateIndex(map, accident):
-    startTime = accident["Start_Time"].split(" ")
-    date = startTime[0]
-    entry = om.get(map, date)
+    startTime = accident["Start_Time"]
+    date = datetime.datetime.strptime(startTime,'%Y-%m-%d %H:%M:%S')
+    entry = om.get(map, date.date())
     if entry:
         dateEntry = me.getValue(entry)
     else:
         dateEntry = new_data_entry()
-        om.put(map, date, dateEntry)
+        om.put(map, date.date(), dateEntry)
     add_date_index(dateEntry, accident)
     return map
 
@@ -195,19 +195,19 @@ def getAccidentsByRange(analyzer, initialDate, finalDate): # Para el requerimien
     la fecha final el la que da el usuario al programa y la inicial
     es la menor fecha de la que se tenga registro.
     """ 
+    print(type(initialDate))
+    print(type(finalDate))
     lst = om.values(analyzer['date_index'], initialDate, finalDate)
     lstiterator = it.newIterator(lst)
     totalaccidents = 0    
     while (it.hasNext(lstiterator)):
         lstdate = it.next(lstiterator)  
         totalaccidents += lt.size(lstdate['lstaccidents'])
+    
+    
+
+
     return totalaccidents
-
-def getAccidentsByrnk(analyzer, finalDate):
-    number = om.rank(analyzer['date_index'], finalDate)
-    return number
-
-
 
 # ==============================
 # Funciones de Comparación.
@@ -232,7 +232,6 @@ def compare_dates(date1, date2):
     if date1 == date2:
         return 0
     elif (date1 > date2):
-
         return 1
     else:
         return -1
@@ -242,7 +241,6 @@ def compare_dates(date1, date2):
 def compare_severities(severity1, severity2):
     """
     Compara dos severidades de accidentes.
-
     """
     severity = me.getKey(severity2)
     if severity1 == severity:

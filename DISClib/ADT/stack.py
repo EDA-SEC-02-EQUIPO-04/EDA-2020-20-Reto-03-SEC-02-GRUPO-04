@@ -28,7 +28,6 @@
 import config
 from DISClib.Utils import error as error
 from DISClib.ADT import list as lt
-
 assert config
 
 """
