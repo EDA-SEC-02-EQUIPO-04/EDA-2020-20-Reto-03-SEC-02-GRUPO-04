@@ -49,9 +49,10 @@ def BreadhtFisrtSearch(graph, source):
     """
     try:
         search = {
-            'source': source,
-            'visited': None
-        }
+                  'source': source,
+                  'visited': None
+                  }
+
         search['visited'] = map.newMap(numelements=g.numVertex(graph),
                                        maptype='PROBING',
                                        comparefunction=graph['comparefunction']

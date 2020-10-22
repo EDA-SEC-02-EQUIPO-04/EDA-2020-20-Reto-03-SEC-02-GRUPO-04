@@ -29,6 +29,7 @@ from DISClib.ADT import minpq as mpq
 from DISClib.DataStructures import heap as h
 from DISClib.DataStructures import listiterator as it
 import datetime
+import collections
 
 assert config
 
@@ -59,6 +60,24 @@ def new_Analyzer():
     return analyzer
 
 
+def new_data_entry(accident):
+    """
+    Crea una entrada en el indice por fechas, es decir en el árbol
+    binario.
+    """
+    entry = {'severity_index': m.newMap(numelements=3, maptype='PROBING', comparefunction=compare_severities),
+             'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
+    return entry
+
+
+def new_severity_index(severity_grade):
+    """
+    Crea una entrada en el indice por tipo de severidad, es decir en
+    la tabla de hash, que se encuentra en cada nodo del árbol.
+    """
+    seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
+    return seventry
+
 # Funciones para agregar información al catálogo.
 
 def add_accident(analyzer, accident):
@@ -73,6 +92,7 @@ def add_accident(analyzer, accident):
 
 
 def updateDateIndex(map, accident):
+
     startTime = accident["Start_Time"] 
     complete_date = datetime.datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
     date = datetime.datetime(complete_date.year, complete_date.month, complete_date.day)
@@ -81,6 +101,7 @@ def updateDateIndex(map, accident):
     if entry:
         dateEntry = me.getValue(entry)
     else:
+        dateEntry = new_data_entry(accident)
         dateEntry = new_data_entry(key)
         om.put(map, date, dateEntry)
     add_date_index(dateEntry, accident)
@@ -107,8 +128,6 @@ def update_hour_index(map, accident):
         om.put(map, hour_index, hour_entry)
     add_hour_index(hour_entry, accident)
     return map
-
-
 
 def add_date_index(datentry, accident):
     """
@@ -138,7 +157,6 @@ def add_date_index(datentry, accident):
     else:
         entry = me.getValue(state_entry)
         lt.addLast(entry["lst_accidents_by_state"], accident)
-
 
 def add_hour_index(hour_entry, accident):
     lst = hour_entry['lst_accidents']
@@ -282,7 +300,20 @@ def getAccidentsBySeverity(analyzer, date):
 
     return severity1Size, severity2Size, severity3Size
 
-
+def getAccidentsByRange(analyzer, initialDate, finalDate): 
+    """
+    Retorna el número de accidentes en un rango de fechas,
+    la fecha final el la que da el usuario al programa y la inicial
+    es la menor fecha de la que se tenga registro.
+    """
+    lst = om.values(analyzer['date_index'], initialDate, finalDate)
+    lstiterator = it.newIterator(lst)
+    totalaccidents = 0  
+    while it.hasNext(lstiterator):
+        lstdate = it.next(lstiterator) 
+        totalaccidents += lt.size(lstdate['lstaccidents'])       
+    return totalaccidents
+  
 def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
     walking_date = initial_date
     severities_on_range = [0, 0, 0]
@@ -360,6 +391,7 @@ def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
     return total, severity_1, severity_2, severity_3, severity_4
 
 
+
 # ==============================
 # Funciones de Comparación.
 # ==============================
@@ -382,8 +414,7 @@ def compare_dates(date1, date2):
     """
     if date1 == date2:
         return 0
-    elif date1 > date2:
-
+    elif (date1 > date2):
         return 1
     else:
         return -1
@@ -404,7 +435,6 @@ def compare_hours(hour1, hour2):
 def compare_severities(severity1, severity2):
     """
     Compara dos severidades de accidentes.
-
     """
     severity = me.getKey(severity2)
     if severity1 == severity:
@@ -413,6 +443,7 @@ def compare_severities(severity1, severity2):
         return 1
     else:
         return -1
+
 
 
 def compare_states(state1, state2):

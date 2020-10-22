@@ -25,8 +25,10 @@
  *
  """
 
+
 from DISClib.DataStructures import arraylistiterator as ait
 from DISClib.DataStructures import linkedlistiterator as lit
+
 
 """
   Este módulo implementa un iterador para recorrer los elementos

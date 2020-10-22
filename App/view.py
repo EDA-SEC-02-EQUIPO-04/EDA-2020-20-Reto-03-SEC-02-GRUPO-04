@@ -56,6 +56,14 @@ def printAccidentsByDateSeverity(analyzer, date):
     print("Accidentes de severidad 2:", accidentsBySeverity[1])
     print("Accidentes de severidad 3:", accidentsBySeverity[2])
 
+
+def printdates(n):
+    if n < '10':
+        number = '0'+str(n)
+    else:
+        number = n
+    return n
+
 def print_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
     accidents_severity_by_hour_range = controller.get_accidents_severity_by_hour_range(analyzer, keylo, keyhi)
     total = accidents_severity_by_hour_range[0]
@@ -87,6 +95,7 @@ def print_accidents_by_date_range(analyzer, initial_date, final_date):
         print('\nEn este rango de fechas los accidentes más reportados son de tipo 2')
     else:
         print('\nEn este rango de fechas los accidentes más reportados son de tipo 3')
+
 
 def print_state_accidents_by_date(analyzer, initial_date, final_date):
     greater_accidents_date = controller.get_greater_accidents_date(analyzer, initial_date, final_date)
@@ -143,7 +152,18 @@ while True:
         date = input("Fecha: ")
         printAccidentsByDateSeverity(cont, date)
     elif int(inputs[0]) == 4:
-        print("\nRequerimiento No 2 del reto 3: ")
+        print("\n Conocer los accidentes anteriores a una fecha: \n")
+        year = input('Ingrese el año (YYYY): ')
+        month = input('Ingrese el mes (MM): ')
+        day = input('Ingrese el día (DD): ')
+        if day == '01':
+            finalDate = year+'-'+month+'-'+str(int(day))
+        else:
+            finalDate = year+'-'+month+'-'+str(int(day)-1) 
+        initialDate = str(controller.min_key(cont))
+        total = controller.getCrimesByRange(cont,initialDate, finalDate)
+        print('\n Se tuvieron '+ str(total) + ' accidentes anteriores a '+  year+'-'+month+'-'+printdates(day))
+
     elif int(inputs[0]) == 5:
         print("\nConocer los accidentes en un rango de fechas: ")
         initial_date = input("Fecha inicial: ")

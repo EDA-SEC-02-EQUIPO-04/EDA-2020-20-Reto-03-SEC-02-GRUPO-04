@@ -50,11 +50,13 @@ def KosarajuSCC(graph):
     """
     try:
         scc = {
+
             'idscc': None,
             'marked': None,
             'grmarked': None,
             'components': 0
         }
+
 
         scc['idscc'] = map.newMap(g.numVertex(graph),
                                   maptype='PROBING',

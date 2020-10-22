@@ -26,7 +26,6 @@
 import config
 from DISClib.DataStructures import listnode as node
 from DISClib.Utils import error as error
-
 assert config
 
 """
@@ -227,7 +226,7 @@ def deleteElement(lst, pos):
         searchpos = 1
         if (pos == 1):
             lst['first'] = lst['first']['next']
-        elif (pos > 1):
+        elif(pos > 1):
             while searchpos < pos:
                 searchpos += 1
                 prev = node
@@ -356,7 +355,7 @@ def isPresent(lst, element):
         if size > 0:
             node = lst['first']
             keyexist = False
-            for keypos in range(1, size + 1):
+            for keypos in range(1, size+1):
                 if (lst['cmpfunction'](element, node['info']) == 0):
                     keyexist = True
                     break
