@@ -23,9 +23,9 @@
  *
  """
 
-
 import config
 from DISClib.DataStructures import indexheap as h
+
 assert config
 
 """
@@ -62,6 +62,7 @@ def isEmpty(iminpq):
     Raises:
         Exception
     """
+
     return(h.isEmpty(iminpq))
 
 
@@ -76,7 +77,9 @@ def size(iminpq):
     Raises:
         Exception
     """
-    return(h.size(iminpq))
+
+    return (h.size(iminpq))
+
 
 
 def insert(iminpq, key, index):
