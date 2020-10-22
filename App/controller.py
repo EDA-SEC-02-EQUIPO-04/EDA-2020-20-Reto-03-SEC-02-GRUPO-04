@@ -127,7 +127,25 @@ def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
     final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
     return model.get_accidentes_range_by_severity(analyzer, initial_date, final_date)
 
-  
+
+def get_state_accidents_by_date(analyzer, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.get_accidentes_range_by_severity(analyzer, initial_date, final_date)
+
+
+def get_greater_accidents_date(analyzer, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.get_greater_accidents_date(analyzer, initial_date, final_date)
+
+
+def get_state_by_accidents_size_in_range(analyzer, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.get_state_by_accidents_size_in_range(analyzer, initial_date, final_date)
+
+
 def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
     return model.get_accidents_severity_by_hour_range(analyzer, keylo, keyhi)
 

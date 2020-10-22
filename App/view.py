@@ -40,7 +40,7 @@ operación seleccionada.
 #  Ruta a los archivos.
 # ___________________________________________________
 
-# accidentsfile = 'us_accidents_small.csv'
+#accidentsfile = 'us_accidents_small.csv'
 accidentsfile = 'us_accidents_dis_2016.csv'
 
 
@@ -88,6 +88,11 @@ def print_accidents_by_date_range(analyzer, initial_date, final_date):
     else:
         print('\nEn este rango de fechas los accidentes más reportados son de tipo 3')
 
+def print_state_accidents_by_date(analyzer, initial_date, final_date):
+    greater_accidents_date = controller.get_greater_accidents_date(analyzer, initial_date, final_date)
+    greater_state = controller.get_state_by_accidents_size_in_range(analyzer, initial_date, final_date)
+    print("\nEl estado con más accidentes reportados en el rango es:", greater_state)
+    print("La fecha con más accidentes reportados en el rango es:", greater_accidents_date)
 # ___________________________________________________
 #  Menú principal.
 # ___________________________________________________
@@ -145,7 +150,10 @@ while True:
         final_date = input("Fecha final: ")
         print_accidents_by_date_range(cont, initial_date, final_date)
     elif int(inputs[0]) == 6:
-        print("\nRequerimiento No 4 del reto 3: ")
+        print("\nConocer el estado con más accidentes: ")
+        initial_date = input("Fecha inicial: ")
+        final_date = input("Fecha final: ")
+        print_state_accidents_by_date(cont, initial_date, final_date)
     elif int(inputs[0]) == 7:
         print("\nConocer los accidentes por rango de horas:")
         keylo = input("Ingrese la hora inicial: ")
