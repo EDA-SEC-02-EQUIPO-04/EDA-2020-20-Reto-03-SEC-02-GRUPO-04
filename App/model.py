@@ -27,6 +27,7 @@ from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
 from DISClib.DataStructures import listiterator as it
 import datetime
+from math import radians, cos, sin, asin, sqrt
 
 assert config
 
@@ -50,7 +51,8 @@ def new_Analyzer():
     Retorna el analizador inicializado.
     """
     analyzer = {'accidents': lt.newList('SINGLE_LINKED', compare_ids),
-                'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates)}
+                'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates),
+                'latitude_longitude_index': om.newMap(omaptype='RBT', comparefunction=compare_points)}
     return analyzer
 
 
@@ -61,6 +63,7 @@ def add_accident(analyzer, accident):
     """
     lt.addLast(analyzer['accidents'], accident)
     updateDateIndex(analyzer['date_index'], accident)
+    update_lat_lng_index(analyzer['latitude_longitude_index'], accident)
     return analyzer
 
 
@@ -74,6 +77,18 @@ def updateDateIndex(map, accident):
         dateEntry = new_data_entry()
         om.put(map, date, dateEntry)
     add_date_index(dateEntry, accident)
+    return map
+
+
+def update_lat_lng_index(map, accident):
+    point = accident["Start_Lat"], accident["Start_Lng"]
+    entry = om.get(map, point)
+    if entry:
+        point_entry = me.getValue(entry)
+    else:
+        point_entry = new_data_entry()
+        om.put(map, point, point_entry)
+    add_date_index(point_entry, accident)
     return map
 
 
@@ -217,7 +232,29 @@ def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
     return severities_on_range
 
 
-# ==============================
+def get_know_geographical_area(analyzer, latitude_, longitude_, radius):
+    points = om.values(analyzer["latitude_longitude_index"], 1, -1)
+    iterator = it.newIterator(points['first']['info']['lstaccidents'])
+    print(points['first']['info']['lstaccidents'])
+    # while it.hasNext(iterator):
+    #     print(iterator)
+    #     print(i)
+    #     lat_point, lon_point = 0, 0
+    #     distance_between_points = distance(latitude_, lat_point, longitude_, lon_point)
+
+
+def distance(lat1, lat2, lon1, lon2):
+    lon1, lon2 = radians(lon1), radians(lon2)
+    lat1, lat2 = radians(lat1), radians(lat2)
+    # Haversine formula
+    dlon, dlat = lon2 - lon1, lat2 - lat1
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+    c = 2 * asin(sqrt(a))
+    # Radius of earth in miles.
+    r = 3956
+    return c * r
+
+    # ==============================
 # Funciones de Comparación.
 # ==============================
 
@@ -241,6 +278,18 @@ def compare_dates(date1, date2):
         return 0
     elif date1 > date2:
 
+        return 1
+    else:
+        return -1
+
+
+def compare_points(point1, point2):
+    """
+    Compara dos fechas
+    """
+    if point1 == point2:
+        return 0
+    elif point1 == -1:
         return 1
     else:
         return -1
