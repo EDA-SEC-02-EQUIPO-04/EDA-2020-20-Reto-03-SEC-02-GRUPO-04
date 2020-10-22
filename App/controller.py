@@ -134,4 +134,4 @@ def get_know_geographical_area(analyzer, latitude_, longitude_, radius_):
 
 
 def get_total_geographical_accidents(accidents_in_area):
-    return int() #todo
+    return model.get_total_geographical_accidents(accidents_in_area)

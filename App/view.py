@@ -81,6 +81,7 @@ def print_know_geographical_area(analyzer, latitude_, longitude_, radius_):
         print(f'{day}: {accidents} accidentes')
     print(f'\nPor lo que en total se han generado {total_accidents_in_area} accidentes en el área.')
 
+
 # ___________________________________________________
 #  Menú principal.
 # ___________________________________________________

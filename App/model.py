@@ -234,13 +234,24 @@ def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
 
 def get_know_geographical_area(analyzer, latitude_, longitude_, radius):
     points = om.values(analyzer["latitude_longitude_index"], 1, -1)
-    iterator = it.newIterator(points['first']['info']['lstaccidents'])
-    print(points['first']['info']['lstaccidents'])
-    # while it.hasNext(iterator):
-    #     print(iterator)
-    #     print(i)
-    #     lat_point, lon_point = 0, 0
-    #     distance_between_points = distance(latitude_, lat_point, longitude_, lon_point)
+    iterator = it.newIterator(points)
+    actual_area = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0, 'Saturday': 0, 'Sunday': 0}
+    while it.hasNext(iterator):
+        entry = it.next(iterator)
+        lat_point, lon_point = (entry['lstaccidents']['first']['info']['Start_Lat'],
+                                entry['lstaccidents']['first']['info']['Start_Lng'])
+        distance_between_points = distance(latitude_, float(lat_point), longitude_, float(lon_point))
+        print(datetime.datetime.strptime('2019-09-09', '%Y-%m-%d').strftime('%A'))
+        if distance_between_points <= radius:
+            actual_area[datetime.datetime.strptime('2019-09-09', '%Y-%m-%d').strftime('%A')] += 1
+    return actual_area
+
+
+def get_total_geographical_accidents(accidents_in_area):
+    total = 0
+    for accidents in accidents_in_area.values():
+        total += accidents
+    return total
 
 
 def distance(lat1, lat2, lon1, lon2):
@@ -255,6 +266,8 @@ def distance(lat1, lat2, lon1, lon2):
     return c * r
 
     # ==============================
+
+
 # Funciones de Comparación.
 # ==============================
 
