@@ -127,8 +127,9 @@ while True:
         else:
             finalDate = year+'-'+month+'-'+str(int(day)-1) 
         initialDate = str(controller.min_key(cont))
-        total = controller.getCrimesByRange(cont,initialDate, finalDate)
+        total,mayor = controller.getCrimesByRange(cont,initialDate, finalDate)
         print('\n Se tuvieron '+ str(total) + ' accidentes anteriores a '+  year+'-'+month+'-'+printdates(day))
+        print('El mayor número de accidentes se dio en la fecha: '+mayor)
 
     elif int(inputs[0]) == 5:
         print("\nRequerimiento No 3 del reto 3: ")

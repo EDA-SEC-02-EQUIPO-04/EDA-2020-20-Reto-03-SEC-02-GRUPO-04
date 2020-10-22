@@ -196,7 +196,7 @@ def getAccidentsBySeverity(analyzer, date):
 def getAccidentsByRange(analyzer, initialDate, finalDate): 
     """
     Retorna el número de accidentes en un rango de fechas,
-    la fecha final el la que da el usuario al programa y la inicial
+    la fecha final el la que da el usuario al programa y la inicizal
     es la menor fecha de la que se tenga registro.
     """
     lst = om.values(analyzer['date_index'], initialDate, finalDate)
