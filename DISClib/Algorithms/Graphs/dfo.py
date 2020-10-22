@@ -38,11 +38,13 @@ assert config
 def DepthFirstOrder(graph):
     try:
         search = {
+
             'marked': None,
             'pre': None,
             'post': None,
             'reversepost': None
         }
+
         search['pre'] = queue.newQueue()
         search['post'] = queue.newQueue()
         search['reversepost'] = stack.newStack()

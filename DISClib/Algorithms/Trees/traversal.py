@@ -27,7 +27,6 @@
 
 import config
 from DISClib.ADT import list as lt
-
 assert config
 
 

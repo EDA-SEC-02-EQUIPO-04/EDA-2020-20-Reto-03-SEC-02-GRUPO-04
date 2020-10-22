@@ -25,9 +25,13 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import map as m
+from DISClib.ADT import minpq as mpq
+from DISClib.DataStructures import heap as h
 from DISClib.DataStructures import listiterator as it
 import datetime
 from math import radians, cos, sin, asin, sqrt
+import collections
+
 
 assert config
 
@@ -53,8 +57,30 @@ def new_Analyzer():
     analyzer = {'accidents': lt.newList('SINGLE_LINKED', compare_ids),
                 'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates),
                 'latitude_longitude_index': om.newMap(omaptype='RBT', comparefunction=compare_points)}
+                "states": lt.newList("SINGLE_LINKED", compare_states),
+                'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates),
+                "hour_index": om.newMap(omaptype="RBT", comparefunction=compare_hours)
+                }
     return analyzer
 
+
+def new_data_entry(accident):
+    """
+    Crea una entrada en el indice por fechas, es decir en el árbol
+    binario.
+    """
+    entry = {'severity_index': m.newMap(numelements=3, maptype='PROBING', comparefunction=compare_severities),
+             'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
+    return entry
+
+
+def new_severity_index(severity_grade):
+    """
+    Crea una entrada en el indice por tipo de severidad, es decir en
+    la tabla de hash, que se encuentra en cada nodo del árbol.
+    """
+    seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
+    return seventry
 
 # Funciones para agregar información al catálogo.
 
@@ -64,17 +90,24 @@ def add_accident(analyzer, accident):
     lt.addLast(analyzer['accidents'], accident)
     updateDateIndex(analyzer['date_index'], accident)
     update_lat_lng_index(analyzer['latitude_longitude_index'], accident)
+    update_hour_index(analyzer["hour_index"], accident)
+    if lt.isPresent(analyzer["states"], accident["State"]) == 0:
+        lt.addLast(analyzer["states"], accident["State"])
     return analyzer
 
 
 def updateDateIndex(map, accident):
-    startTime = accident["Start_Time"].split(" ")
-    date = startTime[0]
+
+    startTime = accident["Start_Time"] 
+    complete_date = datetime.datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")
+    date = datetime.datetime(complete_date.year, complete_date.month, complete_date.day)
+    key = date
     entry = om.get(map, date)
     if entry:
         dateEntry = me.getValue(entry)
     else:
-        dateEntry = new_data_entry()
+        dateEntry = new_data_entry(accident)
+        dateEntry = new_data_entry(key)
         om.put(map, date, dateEntry)
     add_date_index(dateEntry, accident)
     return map
@@ -92,6 +125,27 @@ def update_lat_lng_index(map, accident):
     return map
 
 
+def update_hour_index(map, accident):
+    startTime = accident["Start_Time"].split(" ")
+    h_m_s = startTime[1].split(":") #Horas, minutos, segundos
+    h = h_m_s[0] #Horas
+    m = h_m_s[1] #Minutos
+
+    if int(m) < 30:
+        hour_index = h + ":00"
+    else: 
+        hour_index = h + ":30"
+
+    entry = om.get(map, hour_index)
+    if entry:
+        hour_entry = me.getValue(entry)
+    else:
+        hour_entry = new_hour_entry()
+        om.put(map, hour_index, hour_entry)
+    add_hour_index(hour_entry, accident)
+    return map
+
+  
 def add_date_index(datentry, accident):
     """
     Actualiza un indice de tipo de accidentes. Este índice tiene una lista
@@ -111,14 +165,51 @@ def add_date_index(datentry, accident):
         entry = me.getValue(seventry)
         lt.addLast(entry['lstseverities'], accident)
 
+    state_index = datentry["state_index"]
+    state_entry = m.get(state_index, accident["State"])
+    if state_entry is None:
+        entry = new_state_index(accident["State"])
+        lt.addLast(entry["lst_accidents_by_state"], accident)
+        m.put(state_index, accident["State"], entry)
+    else:
+        entry = me.getValue(state_entry)
+        lt.addLast(entry["lst_accidents_by_state"], accident)
 
-def new_data_entry():
+def add_hour_index(hour_entry, accident):
+    lst = hour_entry['lst_accidents']
+    lt.addLast(lst, accident)
+    severity_index = hour_entry['severity_index']
+    seventry = m.get(severity_index, accident['Severity'])
+    if seventry is None:
+        entry = new_severity_index(accident['Severity'])
+        lt.addLast(entry['lstseverities'], accident)
+        m.put(severity_index, accident['Severity'], entry)
+    else:
+        entry = me.getValue(seventry)
+        lt.addLast(entry['lstseverities'], accident)
+
+
+def new_data_entry(key):
     """
     Crea una entrada en el indice por fechas, es decir en el árbol
     binario.
     """
     entry = {'severity_index': m.newMap(numelements=3, maptype='PROBING', comparefunction=compare_severities),
-             'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates)}
+             'lstaccidents': lt.newList('SINGLE_LINKED', compare_dates),
+             "state_index": m.newMap(maptype="PROBING", comparefunction=compare_states),
+             "key": key
+             }
+    return entry
+
+
+def new_hour_entry():
+    """
+    Crea una entrada en el indice por horas, es decir en el árbol
+    binario.
+    """
+    entry = {"severity_index": m.newMap(numelements=4, maptype='PROBING', comparefunction=compare_severities),
+             "lst_accidents": lt.newList("SINGLE_LINKED", compare_hours)
+             }
     return entry
 
 
@@ -129,6 +220,14 @@ def new_severity_index(severity_grade):
     """
     seventry = {'severity': severity_grade, 'lstseverities': lt.newList('SINGLELINKED', compare_severities)}
     return seventry
+
+def new_state_index(state):
+    """
+    Crea una entrada en el indice por estado, es decir en
+    la tabla de hash, que se encuentra en cada nodo del árbol.
+    """
+    state_entry = {"state": state, "lst_accidents_by_state": lt.newList("SINGLE_LINKED", compare_states)}
+    return state_entry
 
 
 # ==============================
@@ -184,7 +283,7 @@ def get_accidents_by_date_range(analyzer, initial_date, final_date):
     walking_date = initial_date
     accidents_on_range = 0
     while walking_date <= final_date:
-        date = walking_date.strftime('%Y-%m-%d')
+        date = walking_date
         accidents_on_range += getAccidentsByDate(analyzer, date)
         walking_date += datetime.timedelta(days=1)
     return accidents_on_range
@@ -218,6 +317,101 @@ def getAccidentsBySeverity(analyzer, date):
 
     return severity1Size, severity2Size, severity3Size
 
+def getAccidentsByRange(analyzer, initialDate, finalDate): 
+    """
+    Retorna el número de accidentes en un rango de fechas,
+    la fecha final el la que da el usuario al programa y la inicizal
+    es la menor fecha de la que se tenga registro.
+    """
+    
+    lst = om.values(analyzer['date_index'], initialDate, finalDate)
+    lstiterator = it.newIterator(lst)
+    totalaccidents = 0  
+    
+    while it.hasNext(lstiterator):
+        lstdate = it.next(lstiterator) 
+        totalaccidents += lt.size(lstdate['lstaccidents'])   
+    mayor = get_greater_accidents_date(analyzer, initialDate, finalDate)    
+    return (totalaccidents, mayor)
+    
+  
+def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
+    walking_date = initial_date
+    severities_on_range = [0, 0, 0]
+    while walking_date <= final_date:
+        date = walking_date
+        actual_severities = getAccidentsBySeverity(analyzer, date)
+        severities_on_range[0] += actual_severities[0]
+        severities_on_range[1] += actual_severities[1]
+        severities_on_range[2] += actual_severities[2]
+        walking_date += datetime.timedelta(days=1)
+    return severities_on_range
+
+
+def get_greater_accidents_date(analyzer, initial_date, final_date):
+    key_lst = om.values(analyzer["date_index"], initial_date, final_date)
+    iterator = it.newIterator(key_lst)
+    accidents_size = 0
+    greater = None
+    while it.hasNext(iterator):
+        date_entry = it.next(iterator)
+        if accidents_size < lt.size(date_entry["lstaccidents"]):
+            greater = date_entry["key"].strftime("%Y-%m-%d")
+            accidents_size = lt.size(date_entry["lstaccidents"])
+    return greater
+
+def get_state_by_accidents_size_in_range(analyzer, initial_date, final_date):
+    key_lst = om.values(analyzer["date_index"], initial_date, final_date)
+    state_lst = analyzer["states"]
+    state_iterator = it.newIterator(state_lst)
+    greater = None
+    greater_size = 0
+    size = 0
+    while it.hasNext(state_iterator):
+        state = it.next(state_iterator)
+        key_iterator = it.newIterator(key_lst)
+        while it.hasNext(key_iterator):
+            date = it.next(key_iterator)
+            if m.contains(date["state_index"], state):
+                entry = m.get(date["state_index"], state)
+                lst_accidents_by_state = me.getValue(entry)["lst_accidents_by_state"]
+                size = size + lt.size(lst_accidents_by_state)
+        if size > greater_size:
+            greater = state
+            greater_size = size
+    return greater
+
+
+def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
+    entry = om.get(analyzer["hour_index"], "05:30")
+    hour_range = om.values(analyzer["hour_index"], keylo, keyhi)
+    iterator = it.newIterator(hour_range)
+    severity_1 = 0
+    severity_2 = 0
+    severity_3 = 0
+    severity_4 = 0
+    total = 0
+    while it.hasNext(iterator):
+        hour = it.next(iterator)
+        for severity_number in range(1,5):
+            severity_entry = m.get(hour["severity_index"], str(severity_number))
+            if severity_entry != None:
+                severity = me.getValue(severity_entry)
+                size = lt.size(severity["lstseverities"])
+                if severity_number == 1:
+                    severity_1 = severity_1 + size
+                elif severity_number == 2:
+                    severity_2 = severity_2 + size
+                elif severity_number == 3:
+                    severity_3 = severity_3 + size
+                else:
+                    severity_4 = severity_4 + size
+                total = severity_1 + severity_2 + severity_3 + severity_4
+            else:
+                pass
+    return total, severity_1, severity_2, severity_3, severity_4
+
+
 
 def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
     walking_date = initial_date
@@ -241,9 +435,10 @@ def get_know_geographical_area(analyzer, latitude_, longitude_, radius):
         lat_point, lon_point = (entry['lstaccidents']['first']['info']['Start_Lat'],
                                 entry['lstaccidents']['first']['info']['Start_Lng'])
         distance_between_points = distance(latitude_, float(lat_point), longitude_, float(lon_point))
-        print(datetime.datetime.strptime('2019-09-09', '%Y-%m-%d').strftime('%A'))
+        print(entry['lstaccidents']['first']['info']['Start_Time'].strftime('%A'))
         if distance_between_points <= radius:
-            actual_area[datetime.datetime.strptime('2019-09-09', '%Y-%m-%d').strftime('%A')] += 1
+            week_day = entry['lstaccidents']['first']['info']['Start_Time'].strftime('%A')
+            actual_area[week_day] += 1
     return actual_area
 
 
@@ -289,8 +484,7 @@ def compare_dates(date1, date2):
     """
     if date1 == date2:
         return 0
-    elif date1 > date2:
-
+    elif (date1 > date2):
         return 1
     else:
         return -1
@@ -308,10 +502,21 @@ def compare_points(point1, point2):
         return -1
 
 
+def compare_hours(hour1, hour2):
+    """
+    Compara dos horas
+    """
+    if hour1 == hour2:
+        return 0
+    elif hour1 > hour2:
+        return 1
+    else:
+        return -1
+    
+
 def compare_severities(severity1, severity2):
     """
     Compara dos severidades de accidentes.
-
     """
     severity = me.getKey(severity2)
     if severity1 == severity:
@@ -320,3 +525,26 @@ def compare_severities(severity1, severity2):
         return 1
     else:
         return -1
+
+
+
+def compare_states(state1, state2):
+    """
+    Compara dos estados en los que ocurrieron accidentes.
+
+    """
+    try:
+        state = me.getKey(state2)
+        if state1 == state:
+            return 0 
+        elif state1 > state:
+            return 1
+        else:
+            return -1
+    except:
+        if state1 == state2:
+            return 0 
+        elif state1 > state2:
+            return 1
+        else:
+            return -1

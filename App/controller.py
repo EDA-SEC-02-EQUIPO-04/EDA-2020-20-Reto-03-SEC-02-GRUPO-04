@@ -109,11 +109,24 @@ def max_key(analyzer):
 
 
 def getAccidentsByDate(analyzer, date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d')
     return model.getAccidentsByDate(analyzer, date)
 
 
 def getAccidentsBySeverity(analyzer, date):
+    date = datetime.datetime.strptime(date, '%Y-%m-%d')
     return model.getAccidentsBySeverity(analyzer, date)
+
+
+def getCrimesByRange (analyzer, initialDate, finalDate):
+    """
+    Retorna el número de accidentes en un rango de fechas,
+    la fecha final el la que da el usuario al programa y la inicial
+    es la menor fecha de la que se tenga registro.
+    """
+    initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
+    finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
+    return model.getAccidentsByRange(analyzer, initialDate, finalDate)
 
 
 def get_accidents_by_date_range(analyzer, initial_date, final_date):
@@ -135,3 +148,19 @@ def get_know_geographical_area(analyzer, latitude_, longitude_, radius_):
 
 def get_total_geographical_accidents(accidents_in_area):
     return model.get_total_geographical_accidents(accidents_in_area)
+
+  
+def get_greater_accidents_date(analyzer, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.get_greater_accidents_date(analyzer, initial_date, final_date)
+
+
+def get_state_by_accidents_size_in_range(analyzer, initial_date, final_date):
+    initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
+    final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
+    return model.get_state_by_accidents_size_in_range(analyzer, initial_date, final_date)
+
+
+def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
+    return model.get_accidents_severity_by_hour_range(analyzer, keylo, keyhi)
