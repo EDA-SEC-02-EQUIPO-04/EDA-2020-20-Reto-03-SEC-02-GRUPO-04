@@ -248,7 +248,7 @@ def get_accidents_by_date_range(analyzer, initial_date, final_date):
     walking_date = initial_date
     accidents_on_range = 0
     while walking_date <= final_date:
-        date = walking_date.strftime('%Y-%m-%d')
+        date = walking_date
         accidents_on_range += getAccidentsByDate(analyzer, date)
         walking_date += datetime.timedelta(days=1)
     return accidents_on_range
@@ -287,7 +287,7 @@ def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
     walking_date = initial_date
     severities_on_range = [0, 0, 0]
     while walking_date <= final_date:
-        date = walking_date.strftime('%Y-%m-%d')
+        date = walking_date
         actual_severities = getAccidentsBySeverity(analyzer, date)
         severities_on_range[0] += actual_severities[0]
         severities_on_range[1] += actual_severities[1]
@@ -338,12 +338,11 @@ def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
     severity_2 = 0
     severity_3 = 0
     severity_4 = 0
+    total = 0
     while it.hasNext(iterator):
         hour = it.next(iterator)
-        entry = om.get(analyzer["hour_index"], hour)
-        hour_entry = me.getValue(entry)
         for severity_number in range(1,5):
-            severity_entry = m.get(hour_entry["severity_index"], str(severity_number))
+            severity_entry = m.get(hour["severity_index"], str(severity_number))
             if severity_entry != None:
                 severity = me.getValue(severity_entry)
                 size = lt.size(severity["lstseverities"])
