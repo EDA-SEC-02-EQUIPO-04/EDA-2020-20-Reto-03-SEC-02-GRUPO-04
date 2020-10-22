@@ -29,7 +29,9 @@ from DISClib.ADT import minpq as mpq
 from DISClib.DataStructures import heap as h
 from DISClib.DataStructures import listiterator as it
 import datetime
+from math import radians, cos, sin, asin, sqrt
 import collections
+
 
 assert config
 
@@ -53,6 +55,8 @@ def new_Analyzer():
     Retorna el analizador inicializado.
     """
     analyzer = {'accidents': lt.newList('SINGLE_LINKED', compare_ids),
+                'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates),
+                'latitude_longitude_index': om.newMap(omaptype='RBT', comparefunction=compare_points)}
                 "states": lt.newList("SINGLE_LINKED", compare_states),
                 'date_index': om.newMap(omaptype='RBT', comparefunction=compare_dates),
                 "hour_index": om.newMap(omaptype="RBT", comparefunction=compare_hours)
@@ -85,6 +89,7 @@ def add_accident(analyzer, accident):
     """
     lt.addLast(analyzer['accidents'], accident)
     updateDateIndex(analyzer['date_index'], accident)
+    update_lat_lng_index(analyzer['latitude_longitude_index'], accident)
     update_hour_index(analyzer["hour_index"], accident)
     if lt.isPresent(analyzer["states"], accident["State"]) == 0:
         lt.addLast(analyzer["states"], accident["State"])
@@ -108,6 +113,18 @@ def updateDateIndex(map, accident):
     return map
 
 
+def update_lat_lng_index(map, accident):
+    point = accident["Start_Lat"], accident["Start_Lng"]
+    entry = om.get(map, point)
+    if entry:
+        point_entry = me.getValue(entry)
+    else:
+        point_entry = new_data_entry()
+        om.put(map, point, point_entry)
+    add_date_index(point_entry, accident)
+    return map
+
+
 def update_hour_index(map, accident):
     startTime = accident["Start_Time"].split(" ")
     h_m_s = startTime[1].split(":") #Horas, minutos, segundos
@@ -128,6 +145,7 @@ def update_hour_index(map, accident):
     add_hour_index(hour_entry, accident)
     return map
 
+  
 def add_date_index(datentry, accident):
     """
     Actualiza un indice de tipo de accidentes. Este índice tiene una lista
@@ -395,7 +413,56 @@ def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
 
 
 
-# ==============================
+def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
+    walking_date = initial_date
+    severities_on_range = [0, 0, 0]
+    while walking_date <= final_date:
+        date = walking_date.strftime('%Y-%m-%d')
+        actual_severities = getAccidentsBySeverity(analyzer, date)
+        severities_on_range[0] += actual_severities[0]
+        severities_on_range[1] += actual_severities[1]
+        severities_on_range[2] += actual_severities[2]
+        walking_date += datetime.timedelta(days=1)
+    return severities_on_range
+
+
+def get_know_geographical_area(analyzer, latitude_, longitude_, radius):
+    points = om.values(analyzer["latitude_longitude_index"], 1, -1)
+    iterator = it.newIterator(points)
+    actual_area = {'Monday': 0, 'Tuesday': 0, 'Wednesday': 0, 'Thursday': 0, 'Friday': 0, 'Saturday': 0, 'Sunday': 0}
+    while it.hasNext(iterator):
+        entry = it.next(iterator)
+        lat_point, lon_point = (entry['lstaccidents']['first']['info']['Start_Lat'],
+                                entry['lstaccidents']['first']['info']['Start_Lng'])
+        distance_between_points = distance(latitude_, float(lat_point), longitude_, float(lon_point))
+        print(entry['lstaccidents']['first']['info']['Start_Time'].strftime('%A'))
+        if distance_between_points <= radius:
+            week_day = entry['lstaccidents']['first']['info']['Start_Time'].strftime('%A')
+            actual_area[week_day] += 1
+    return actual_area
+
+
+def get_total_geographical_accidents(accidents_in_area):
+    total = 0
+    for accidents in accidents_in_area.values():
+        total += accidents
+    return total
+
+
+def distance(lat1, lat2, lon1, lon2):
+    lon1, lon2 = radians(lon1), radians(lon2)
+    lat1, lat2 = radians(lat1), radians(lat2)
+    # Haversine formula
+    dlon, dlat = lon2 - lon1, lat2 - lat1
+    a = sin(dlat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dlon / 2) ** 2
+    c = 2 * asin(sqrt(a))
+    # Radius of earth in miles.
+    r = 3956
+    return c * r
+
+    # ==============================
+
+
 # Funciones de Comparación.
 # ==============================
 
@@ -418,6 +485,18 @@ def compare_dates(date1, date2):
     if date1 == date2:
         return 0
     elif (date1 > date2):
+        return 1
+    else:
+        return -1
+
+
+def compare_points(point1, point2):
+    """
+    Compara dos fechas
+    """
+    if point1 == point2:
+        return 0
+    elif point1 == -1:
         return 1
     else:
         return -1

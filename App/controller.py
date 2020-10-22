@@ -128,6 +128,7 @@ def getCrimesByRange (analyzer, initialDate, finalDate):
     finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
     return model.getAccidentsByRange(analyzer, initialDate, finalDate)
 
+
 def get_accidents_by_date_range(analyzer, initial_date, final_date):
     initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
     final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
@@ -140,6 +141,15 @@ def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
     return model.get_accidentes_range_by_severity(analyzer, initial_date, final_date)
 
 
+def get_know_geographical_area(analyzer, latitude_, longitude_, radius_):
+    latitude_, longitude_, radius_ = float(latitude_), float(longitude_), float(radius_)
+    return model.get_know_geographical_area(analyzer, latitude_, longitude_, radius_)
+
+
+def get_total_geographical_accidents(accidents_in_area):
+    return model.get_total_geographical_accidents(accidents_in_area)
+
+  
 def get_greater_accidents_date(analyzer, initial_date, final_date):
     initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
     final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')

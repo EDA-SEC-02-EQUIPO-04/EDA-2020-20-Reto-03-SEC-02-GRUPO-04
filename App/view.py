@@ -40,8 +40,10 @@ operación seleccionada.
 #  Ruta a los archivos.
 # ___________________________________________________
 
-#accidentsfile = 'us_accidents_small.csv'
-accidentsfile = 'us_accidents_small.csv'
+
+# accidentsfile = 'us_accidents_small.csv'
+# accidentsfile = 'us_accidents_dis_2016.csv'
+accidentsfile = 'small.csv'
 
 
 # ___________________________________________________
@@ -104,6 +106,30 @@ def print_accidents_by_date_range(analyzer, initial_date, final_date):
         print('\nEn este rango de fechas los accidentes más reportados son de tipo 3')
 
 
+def print_accidents_by_date_range(analyzer, initial_date_, final_date_):
+    accidents_in_range = controller.get_accidents_by_date_range(analyzer, initial_date_, final_date_)
+    accidents_range_by_severity = controller.get_accidentes_range_by_severity(analyzer, initial_date_, final_date_)
+    print('Total de accidentes ocurridos en el rango de la fecha:', accidents_in_range)
+    print('\nAccidentes de severidad 1:', accidents_range_by_severity[0])
+    print('Accidentes de severidad 2:', accidents_range_by_severity[1])
+    print('Accidentes de severidad 3:', accidents_range_by_severity[2])
+    if accidents_range_by_severity[0] > accidents_range_by_severity[1] > accidents_range_by_severity[2]:
+        print('\nEn este rango de fechas los accidentes más reportados son de tipo 1')
+    elif accidents_range_by_severity[1] > accidents_range_by_severity[2]:
+        print('\nEn este rango de fechas los accidentes más reportados son de tipo 2')
+    else:
+        print('\nEn este rango de fechas los accidentes más reportados son de tipo 3')
+
+
+def print_know_geographical_area(analyzer, latitude_, longitude_, radius_):
+    accidents_in_area = controller.get_know_geographical_area(analyzer, latitude_, longitude_, radius_)
+    total_accidents_in_area = controller.get_total_geographical_accidents(accidents_in_area)
+    print(f'En el punto ({latitude_}, {longitude_}) alrededor de un área de {radius_} millas se han producido:\n')
+    for day, accidents in accidents_in_area.items():
+        print(f'{day}: {accidents} accidentes')
+    print(f'\nPor lo que en total se han generado {total_accidents_in_area} accidentes en el área.')
+
+
 def print_state_accidents_by_date(analyzer, initial_date, final_date):
     greater_accidents_date = controller.get_greater_accidents_date(analyzer, initial_date, final_date)
     greater_state = controller.get_state_by_accidents_size_in_range(analyzer, initial_date, final_date)
@@ -115,25 +141,25 @@ def print_state_accidents_by_date(analyzer, initial_date, final_date):
 
 
 def print_menu():
-    print("\n")
-    print("*******************************************")
-    print("Bienvenido")
-    print("1- Inicializar Analizador")
-    print("2- Cargar información de accidentes")
-    print("3- Conocer los accidentes en una fecha")
-    print("4- Conocer los accidentes anteriores a una fecha")
-    print("5- Conocer los accidentes en un rango de fechas")
-    print("6- Conocer el estado con más accidentes")
-    print("7- Conocer los accidentes por rango de horas")
-    print("8- Conocer la zona geográfica más accidentada")
-    print("9- Usar el conjunto completo de datos")
-    print("0- Salir")
-    print("*******************************************")
+    print('\n')
+    print('*******************************************')
+    print('Bienvenido')
+    print('1- Inicializar Analizador')
+    print('2- Cargar información de accidentes')
+    print('3- Conocer los accidentes en una fecha')
+    print('4- Conocer los accidentes anteriores a una fecha')
+    print('5- Conocer los accidentes en un rango de fechas')
+    print('6- Conocer el estado con más accidentes')
+    print('7- Conocer los accidentes por rango de horas')
+    print('8- Conocer la zona geográfica más accidentada')
+    print('9- Usar el conjunto completo de datos')
+    print('0- Salir')
+    print('*******************************************')
 
 
-"""
+'''
 Menu principal.
-"""
+'''
 
 cont = controller.init()
 while True:
@@ -155,11 +181,10 @@ while True:
         print(f'Mayor Llave: {controller.max_key(cont)}')
         print('Tiempo de ejecución ', process_time() - t1_start, ' segundos')
     elif int(inputs[0]) == 3:
-        print("\nConocer los accidentes en una fecha: ")
-        date = input("Fecha: ")
+        print('\nConocer los accidentes en una fecha: ')
+        date = input('Fecha: ')
         printAccidentsByDateSeverity(cont, date)
     elif int(inputs[0]) == 4:
-
         print("\n Conocer los accidentes anteriores a una fecha: \n")
         year = input('Ingrese el año (YYYY): ')
         month = input('Ingrese el mes (MM): ')
@@ -169,7 +194,6 @@ while True:
         else:
             finalDate = year+'-'+month+'-'+str(int(day)-1) 
         printAccidentsbyRange(cont, finalDate)
-
     elif int(inputs[0]) == 5:
         print("\nConocer los accidentes en un rango de fechas: ")
         initial_date = input("Fecha inicial: ")
@@ -186,8 +210,12 @@ while True:
         keyhi = input("Ingrese la hora final: ")
         print_accidents_severity_by_hour_range(cont, keylo, keyhi)
     elif int(inputs[0]) == 8:
-        print("\nRequerimiento No 6 del reto 3: ")
+        print('Ingrese un punto central para consultar accidentes en esa localización.')
+        latitude = input('Latitud: ')
+        longitude = input('Longitud: ')
+        radius = input('Radio de búsqueda en millas: ')
+        print_know_geographical_area(cont, latitude, longitude, radius)
     elif int(inputs[0]) == 9:
-        print("\nRequerimiento No 7 del reto 3: ")
+        print('\nRequerimiento No 7 del reto 3: ')
     else:
         sys.exit(0)
