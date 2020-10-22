@@ -30,8 +30,6 @@ from DISClib.DataStructures import heap as h
 
 assert config
 
-
-
 """
 Implementación de una cola de prioridad orientada a menor
 

@@ -285,7 +285,6 @@ def getEdge(graph, vertexa, vertexb):
                     (e.other(edge, e.either(edge)) == vertexa)):
                 if (e.either(edge) == vertexb or
                         (e.other(edge, e.either(edge)) == vertexb)):
-
                     return edge
         return None
     except Exception as exp:

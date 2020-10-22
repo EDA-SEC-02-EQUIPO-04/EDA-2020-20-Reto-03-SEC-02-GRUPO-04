@@ -118,7 +118,7 @@ def getAccidentsBySeverity(analyzer, date):
     return model.getAccidentsBySeverity(analyzer, date)
 
 
-def getCrimesByRange (analyzer, initialDate, finalDate):
+def getCrimesByRange(analyzer, initialDate, finalDate):
     """
     Retorna el número de accidentes en un rango de fechas,
     la fecha final el la que da el usuario al programa y la inicial
@@ -149,7 +149,7 @@ def get_know_geographical_area(analyzer, latitude_, longitude_, radius_):
 def get_total_geographical_accidents(accidents_in_area):
     return model.get_total_geographical_accidents(accidents_in_area)
 
-  
+
 def get_greater_accidents_date(analyzer, initial_date, final_date):
     initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
     final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')

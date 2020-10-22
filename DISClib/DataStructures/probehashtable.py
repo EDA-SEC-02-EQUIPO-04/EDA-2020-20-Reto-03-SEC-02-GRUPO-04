@@ -322,7 +322,6 @@ def findSlot(map, key, hashvalue, comparefunction):
             if isAvailable(table, searchpos):  # La posición esta disponible
                 element = lt.getElement(table, searchpos)
                 if (avail == -1):
-
                     avail = searchpos  # primera posición disponible
                 if element['key'] is None:  # nunca ha sido utilizada
                     break
@@ -394,16 +393,16 @@ def rehash(map):
 
 def isPrime(n):
     # Corner cases
-    if(n <= 1):
+    if (n <= 1):
         return False
-    if(n <= 3):
+    if (n <= 3):
         return True
 
-    if(n % 2 == 0 or n % 3 == 0):
+    if (n % 2 == 0 or n % 3 == 0):
         return False
 
     for i in range(5, int(math.sqrt(n) + 1), 6):
-        if(n % i == 0 or n % (i + 2) == 0):
+        if (n % i == 0 or n % (i + 2) == 0):
             return False
 
     return True
@@ -420,8 +419,8 @@ def nextPrime(N):
     found = False
     # Loop continuously until isPrime returns
     # True for a number greater than n
-    while(not found):
+    while (not found):
         prime = prime + 1
-        if(isPrime(prime) is True):
+        if (isPrime(prime) is True):
             found = True
     return int(prime)

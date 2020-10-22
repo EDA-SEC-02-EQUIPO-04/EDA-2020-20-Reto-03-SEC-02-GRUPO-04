@@ -57,7 +57,6 @@ def KosarajuSCC(graph):
             'components': 0
         }
 
-
         scc['idscc'] = map.newMap(g.numVertex(graph),
                                   maptype='PROBING',
                                   comparefunction=graph['comparefunction']

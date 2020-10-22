@@ -63,7 +63,7 @@ def isEmpty(iminpq):
         Exception
     """
 
-    return(h.isEmpty(iminpq))
+    return (h.isEmpty(iminpq))
 
 
 def size(iminpq):
@@ -79,7 +79,6 @@ def size(iminpq):
     """
 
     return (h.size(iminpq))
-
 
 
 def insert(iminpq, key, index):

@@ -42,8 +42,8 @@ operación seleccionada.
 
 
 # accidentsfile = 'us_accidents_small.csv'
-# accidentsfile = 'us_accidents_dis_2016.csv'
-accidentsfile = 'small.csv'
+accidentsfile = 'us_accidents_dis_2016.csv'
+# accidentsfile = 'small.csv'
 
 
 # ___________________________________________________
@@ -58,20 +58,22 @@ def printAccidentsByDateSeverity(analyzer, date):
     print("Accidentes de severidad 2:", accidentsBySeverity[1])
     print("Accidentes de severidad 3:", accidentsBySeverity[2])
 
+
 def printdates(n):
     if n < '10':
-        number = '0'+str(n)
+        number = '0' + str(n)
     else:
         number = n
     return number
 
+
 def printAccidentsbyRange(analyzer, FinalDate):
-    
     initial = str(controller.min_key(cont))
     initialDate = initial.split(" ")[0]
-    total,mayor = controller.getCrimesByRange(cont,initialDate, finalDate)
-    print('\n'+'Se tuvieron '+ str(total) + ' accidentes anteriores a '+  year+'-'+month+'-'+printdates(day))
-    print('El mayor número de accidentes se dio en la fecha: '+mayor)
+    total, mayor = controller.getCrimesByRange(cont, initialDate, finalDate)
+    print('\n' + 'Se tuvieron ' + str(total) + ' accidentes anteriores a ' + year + '-' + month + '-' + printdates(day))
+    print('El mayor número de accidentes se dio en la fecha: ' + mayor)
+
 
 def print_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
     accidents_severity_by_hour_range = controller.get_accidents_severity_by_hour_range(analyzer, keylo, keyhi)
@@ -82,13 +84,13 @@ def print_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
     severity_4 = accidents_severity_by_hour_range[4]
     print("Total de accidentes en el rango horario:", total)
     print("\nAccidentes de severidad 1:", severity_1)
-    print("Porcentaje contra el total de accidentes reportados:", round((severity_1/total)*100, 1), "%")
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_1 / total) * 100, 1), "%")
     print("\nAccidentes de severidad 2:", severity_2)
-    print("Porcentaje contra el total de accidentes reportados:", round((severity_2/total)*100, 1), "%")
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_2 / total) * 100, 1), "%")
     print("\nAccidentes de severidad 3:", severity_3)
-    print("Porcentaje contra el total de accidentes reportados:", round((severity_3/total)*100, 1), "%")
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_3 / total) * 100, 1), "%")
     print("\nAccidentes de severidad 4:", severity_4)
-    print("Porcentaje contra el total de accidentes reportados:", round((severity_4/total)*100, 1), "%")
+    print("Porcentaje contra el total de accidentes reportados:", round((severity_4 / total) * 100, 1), "%")
 
 
 def print_accidents_by_date_range(analyzer, initial_date, final_date):
@@ -135,6 +137,8 @@ def print_state_accidents_by_date(analyzer, initial_date, final_date):
     greater_state = controller.get_state_by_accidents_size_in_range(analyzer, initial_date, final_date)
     print("\nEl estado con más accidentes reportados en el rango es:", greater_state)
     print("La fecha con más accidentes reportados en el rango es:", greater_accidents_date)
+
+
 # ___________________________________________________
 #  Menú principal.
 # ___________________________________________________
@@ -190,9 +194,9 @@ while True:
         month = input('Ingrese el mes (MM): ')
         day = input('Ingrese el día (DD): ')
         if day == '01':
-            finalDate = year+'-'+month+'-'+str(int(day))
+            finalDate = year + '-' + month + '-' + str(int(day))
         else:
-            finalDate = year+'-'+month+'-'+str(int(day)-1) 
+            finalDate = year + '-' + month + '-' + str(int(day) - 1)
         printAccidentsbyRange(cont, finalDate)
     elif int(inputs[0]) == 5:
         print("\nConocer los accidentes en un rango de fechas: ")

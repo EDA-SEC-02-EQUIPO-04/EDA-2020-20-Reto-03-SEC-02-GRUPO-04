@@ -148,7 +148,6 @@ def min(iheap):
     try:
 
         if (iheap['size'] > 0):
-
             minIdx = lt.getElement(iheap['elements'], 1)
             return minIdx['key']
         return None
@@ -285,7 +284,7 @@ def swim(iheap, pos):
             if greater(iheap, parent, element):
                 exchange(iheap, posparent, poselement)
 
-            pos = (pos//2)
+            pos = (pos // 2)
 
     except Exception as exp:
         error.reraise(exp, 'indexheap:swim')
@@ -312,7 +311,6 @@ def sink(iheap, pos):
             if (j < size):
                 if greater(iheap, lt.getElement(iheap['elements'], j),
                            lt.getElement(iheap['elements'], (j + 1))):
-
                     j += 1
             if (not greater(iheap, lt.getElement(iheap['elements'], pos),
                             lt.getElement(iheap['elements'], j))):

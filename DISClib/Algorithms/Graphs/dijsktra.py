@@ -24,7 +24,6 @@
  *
  """
 
-
 import config
 from DISClib.DataStructures import edge as e
 from DISClib.DataStructures import listiterator as it
@@ -193,7 +192,6 @@ def initSearch(graph, source):
             'visited': None,
             'iminpq': None
         }
-
 
         search['visited'] = map.newMap(numelements=g.numVertex(graph),
                                        maptype='PROBING',

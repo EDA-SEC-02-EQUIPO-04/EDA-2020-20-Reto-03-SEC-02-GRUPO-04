@@ -220,7 +220,6 @@ def sink(heap, pos):
             if (j < size):
                 if greater(heap, lt.getElement(heap['elements'], j),
                            lt.getElement(heap['elements'], (j + 1))):
-
                     j += 1
             if (not greater(heap, lt.getElement(heap['elements'], pos),
                             lt.getElement(heap['elements'], j))):
