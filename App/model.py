@@ -108,7 +108,6 @@ def updateDateIndex(map, accident):
     return map
 
 
-
 def update_hour_index(map, accident):
     startTime = accident["Start_Time"].split(" ")
     h_m_s = startTime[1].split(":") #Horas, minutos, segundos
@@ -303,16 +302,20 @@ def getAccidentsBySeverity(analyzer, date):
 def getAccidentsByRange(analyzer, initialDate, finalDate): 
     """
     Retorna el número de accidentes en un rango de fechas,
-    la fecha final el la que da el usuario al programa y la inicial
+    la fecha final el la que da el usuario al programa y la inicizal
     es la menor fecha de la que se tenga registro.
     """
+    
     lst = om.values(analyzer['date_index'], initialDate, finalDate)
     lstiterator = it.newIterator(lst)
     totalaccidents = 0  
+    
     while it.hasNext(lstiterator):
         lstdate = it.next(lstiterator) 
-        totalaccidents += lt.size(lstdate['lstaccidents'])       
-    return totalaccidents
+        totalaccidents += lt.size(lstdate['lstaccidents'])   
+    mayor = get_greater_accidents_date(analyzer, initialDate, finalDate)    
+    return (totalaccidents, mayor)
+    
   
 def get_accidentes_range_by_severity(analyzer, initial_date, final_date):
     walking_date = initial_date

@@ -126,7 +126,7 @@ def getCrimesByRange (analyzer, initialDate, finalDate):
     """
     initialDate = datetime.datetime.strptime(initialDate, '%Y-%m-%d')
     finalDate = datetime.datetime.strptime(finalDate, '%Y-%m-%d')
-    return (model.getAccidentsByRange(analyzer, initialDate.date(), finalDate.date()))
+    return model.getAccidentsByRange(analyzer, initialDate, finalDate)
 
 def get_accidents_by_date_range(analyzer, initial_date, final_date):
     initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
@@ -150,7 +150,6 @@ def get_state_by_accidents_size_in_range(analyzer, initial_date, final_date):
     initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d')
     final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d')
     return model.get_state_by_accidents_size_in_range(analyzer, initial_date, final_date)
-
 
 
 def get_accidents_severity_by_hour_range(analyzer, keylo, keyhi):
